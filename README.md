@@ -20,7 +20,7 @@ assets/photo.svg        证件照占位图
 2. 在本目录下：
 
 ```bash
-git init && git add -A && git commit -m "personal site" && git branch -M main && git remote add origin https://github.com/<用户名>/<用户名>.github.io.git && git push -u origin main
+git init && git add -A && git commit -m "personal site" && git branch -M main && git remote add origin https://github.com/yhj3/yhj3.github.io.git && git push -u origin main
 ```
 
 3. 仓库 Settings → Pages → Source 选 `Deploy from a branch`，branch 选 `main` / 根目录 `/`。
