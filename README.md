@@ -10,7 +10,7 @@ projects/viberepair.html VibeRepair+：检索框架 + 评估协议纠错
 projects/scilit-rag.html 文献重排：dueling bandit + citation context
 assets/style.css        全站样式（含深色模式）
 assets/Yihang_Jiao_CV.pdf 简历（换新版直接覆盖同名文件）
-assets/photo.svg        证件照占位图
+assets/photo.jpg        证件照
 .nojekyll               告诉 GitHub Pages 不要跑 Jekyll
 ```
 
@@ -30,7 +30,7 @@ git init && git add -A && git commit -m "personal site" && git branch -M main &&
 
 ## 上线前要换掉的三处
 
-- **照片**：把证件照存成 `assets/photo.jpg`，然后把 `index.html` 里的 `assets/photo.svg` 改成 `assets/photo.jpg`。
+- **照片**：已放好 `assets/photo.jpg`；换照片直接覆盖同名文件即可。
 - **中文名**：`index.html` 里 `<h1>` 上方有注释，想加就写成 `Yihang Jiao (焦一航)` 这种形式。
 - **`research.html` 里的 "Multimodal perturbational cell-state modeling"**：目前是我按你简历里的能力线索写的方向草稿，术语和范围都要你自己按真实想法改一遍——这段是套磁邮件里教授最会点进来看的一段。
 
