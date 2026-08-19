@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BraTS: U-Net vs. TransUNet — Yihang Jiao</title>
+<meta name="description" content="A controlled comparison of U-Net and TransUNet on multi-modal brain MRI, with class-wise Dice and an ablation isolating loss and sampling design from backbone choice.">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<nav class="top"><div class="wrap">
+  <a class="brand" href="../index.html">Yihang Jiao</a>
+  <div class="links">
+    <a href="../index.html">Home</a>
+    <a href="../research.html">Research</a>
+    <a href="../assets/Yihang_Jiao_CV.pdf">CV</a>
+    <a href="mailto:yihangj3@illinois.edu">Email</a>
+  </div>
+</div></nav>
+
+<div class="wrap">
+<header class="hero">
+  <h1>Brain Tumor Segmentation on Multi-Modal MRI</h1>
+  <p class="tagline">U-Net vs. TransUNet under fixed data and training settings &middot; Aug – Dec 2025</p>
+</header>
+
+<main>
+
+<section>
+  <h2>The problem with most comparisons</h2>
+  <p>
+    In many segmentation codebases, an architecture change arrives bundled with changes to cropping, slice
+    sampling, intensity normalization, and the loss. When the Dice score moves, there is no way to say which
+    change moved it. So the reported conclusion — "the transformer backbone wins" — may actually be a
+    statement about preprocessing.
+  </p>
+  <p>
+    I built a single training entrypoint that instantiates three model families over the same data path,
+    the same split rule, and the same metric:
+  </p>
+  <ul>
+    <li>a classic <strong>U-Net</strong> baseline with BatchNorm double-convolution blocks;</li>
+    <li>a configurable <strong>"flex" U-Net</strong> — tunable depth, base width, normalization
+        (Batch/Group/Instance/Layer/none), bilinear vs. transposed-conv upsampling, optional residual blocks;</li>
+    <li>a <strong>TransUNet</strong> variant with a hybrid ResNet50&nbsp;+&nbsp;ViT-B/16 encoder and a
+        convolutional decoder, plus an optional lightweight self-attention block that refines one skip
+        connection before concatenation.</li>
+  </ul>
+  <p>
+    Each checkpoint stores the full architecture configuration and the crop coordinates used during
+    training, so evaluation scripts reconstruct the exact model without manual bookkeeping.
+  </p>
+</section>
+
+<section>
+  <h2>Data path</h2>
+  <p>
+    Every subject carries four co-registered MRI modalities (FLAIR, T1, T1-CE, T2) and a tumor mask; inputs
+    are 2D axial slices, <span class="mono">x &isin; R<sup>4&times;H&times;W</sup></span>, with four classes
+    after remapping the BraTS label 4 to 3.
+  </p>
+  <ul>
+    <li><strong>Automatic brain-region cropping</strong> — one crop box computed from non-zero voxels across
+        subjects and modalities, disabled automatically if the bounds are degenerate.</li>
+    <li><strong>Slice indexing</strong> that discards empty slices and stores a foreground flag per slice,
+        later used for oversampling.</li>
+    <li><strong>Per-slice z-score intensity normalization</strong>, with an optional non-linear contrast
+        mapping to test whether stronger normalization helps.</li>
+    <li><strong>Weighted foreground oversampling</strong> (<span class="mono">WeightedRandomSampler</span>,
+        &alpha;&nbsp;=&nbsp;5) so tumor-bearing slices are seen more often, against the severe
+        tumor/background skew.</li>
+    <li><strong>Fixed seed and validation ratio</strong> so every variant is compared under the same split.</li>
+  </ul>
+  <p>
+    Objective: class-weighted cross-entropy plus a <strong>present-class foreground Dice</strong> term —
+    Dice is computed only over foreground classes that actually appear in the ground truth of the batch,
+    because naive Dice is inflated by absent classes. The Dice weight is warmed up over the first few
+    epochs for stability. Training used Adam, mixed precision, and gradient accumulation under a 15-epoch
+    budget, from scratch.
+  </p>
+</section>
+
+<section>
+  <h2>Results</h2>
+  <div class="tablewrap">
+  <table>
+    <caption>
+      Best checkpoints on the BraTS validation slices. Foreground (FG) Dice is averaged over labels 1–3,
+      and only over slices where the class is present. Same split rule and metric for every row.
+    </caption>
+    <thead>
+      <tr>
+        <th>Method</th><th>Input res.</th><th>mean CE &darr;</th><th>FG Dice &uarr;</th>
+        <th>Dice 1</th><th>Dice 2</th><th>Dice 3</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Original U-Net</td><td>crop</td><td>0.0437</td><td>0.7326</td><td>0.6826</td><td>0.6800</td><td>0.8351</td></tr>
+      <tr><td>Flex U-Net (norm + depth only)</td><td>crop</td><td>0.3850</td><td>0.6323</td><td>0.5395</td><td>0.6475</td><td>0.7100</td></tr>
+      <tr><td>Flex U-Net (loss improved)</td><td>crop</td><td>0.1952</td><td>0.7033</td><td>0.6048</td><td>0.7100</td><td>0.7952</td></tr>
+      <tr class="best"><td>TransUNet baseline (R50-ViT-B/16)</td><td>320²</td><td>0.0455</td><td>0.7575</td><td>0.6750</td><td>0.7652</td><td>0.8322</td></tr>
+      <tr><td>TransUNet (skip refinement + aug)</td><td>224²</td><td>0.0411</td><td>0.7347</td><td>0.6493</td><td>0.7455</td><td>0.8094</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section>
+  <h2>What the numbers actually say</h2>
+  <div class="entry">
+    <h3>1. Loss and sampling design matter as much as the backbone</h3>
+    <p>
+      Making the U-Net deeper and swapping BatchNorm for GroupNorm — with the loss untouched — <em>hurt</em>
+      performance badly (0.6323 vs. 0.7326 for the plain baseline, with mean CE rising to 0.3850). More
+      capacity without a matching objective got stuck in a worse regime. Reworking only the objective and
+      sampler on that same architecture — present-class foreground Dice with warmup, class weighting,
+      foreground oversampling — recovered roughly <strong>+7 Dice points</strong> (to 0.7033) and cut mean
+      CE by about 0.19.
+    </p>
+  </div>
+  <div class="entry">
+    <h3>2. The transformer's advantage is local to one subregion</h3>
+    <p>
+      TransUNet took the best overall FG Dice (0.7575, about +2.5 points over the U-Net), but not uniformly.
+      On the compact structures the tuned U-Net is competitive or better (Dice&nbsp;3: 0.8351 vs. 0.8322).
+      Essentially all of the gain sits in label 2 — the more spatially extended, diffuse subregion —
+      at <strong>0.7652 vs. 0.6800</strong>. Global self-attention helps where long-range context is the
+      binding constraint, and not much elsewhere. Reporting only the aggregate FG Dice would have hidden this.
+    </p>
+  </div>
+  <div class="entry">
+    <h3>3. Better calibration can cost Dice</h3>
+    <p>
+      My decoder-side skip refinement with stronger augmentation improved mean cross-entropy
+      (0.0455 &rarr; 0.0411) while <em>lowering</em> FG Dice (0.7575 &rarr; 0.7347). The modified model is
+      better calibrated on average but more conservative on small lesions — which is exactly what hurts on
+      rare classes. Two reasonable metrics, opposite verdicts.
+    </p>
+  </div>
+  <div class="entry">
+    <h3>4. Class imbalance is still the binding constraint</h3>
+    <p>
+      Every method does best on the largest structure (label 3) and worst on label 1, tracking the
+      foreground/background skew of BraTS slices rather than anything architectural.
+    </p>
+  </div>
+</section>
+
+<a class="back" href="../index.html">&larr; Back to home</a>
+</main>
+</div>
+
+<footer><div class="wrap">
+  Independent project, UIUC &middot; <a href="mailto:yihangj3@illinois.edu">yihangj3@illinois.edu</a>
+</div></footer>
+
+</body>
+</html>

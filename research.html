@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research — Yihang Jiao</title>
+<meta name="description" content="Research interests and directions: machine learning for biomedical data, perturbational cell-state modeling, and evaluation protocols that do not leak.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav class="top"><div class="wrap">
+  <a class="brand" href="index.html">Yihang Jiao</a>
+  <div class="links">
+    <a href="index.html">Home</a>
+    <a class="here" href="research.html">Research</a>
+    <a href="assets/Yihang_Jiao_CV.pdf">CV</a>
+    <a href="mailto:yihangj3@illinois.edu">Email</a>
+  </div>
+</div></nav>
+
+<div class="wrap">
+<header class="hero">
+  <h1>Research</h1>
+  <p class="tagline">What I work on, and where I am trying to take it.</p>
+</header>
+
+<main>
+
+<section>
+  <h2>Interests</h2>
+  <p>
+    Machine learning for biomedical data: <strong>medical image segmentation</strong>, <strong>biomedical
+    literature and knowledge retrieval</strong>, and <strong>reliable evaluation of deep models</strong>
+    under class imbalance, limited supervision, and distribution shift.
+  </p>
+  <p>
+    The last one is not a footnote to the first two. In both of my recent projects, the most consequential
+    finding came from the measurement rather than the model:
+  </p>
+  <ul>
+    <li>
+      On <a href="projects/brats.html">BraTS</a>, computing Dice only over classes actually present in a
+      batch changed what the number meant — naive Dice is inflated by absent classes, and a model can look
+      good on a metric that is mostly rewarding it for empty background.
+    </li>
+    <li>
+      In <a href="projects/viberepair.html">VibeRepair+</a>, the field-standard leave-one-out retrieval
+      evaluation gave every retriever a perfect recall@1 while those retrievers agreed on only 34.1% of
+      their top-1 results. The protocol was measuring whether a document can find itself.
+    </li>
+  </ul>
+  <p>
+    Biomedical settings make this worse, not better: labels are scarce and expensive, positives are rare,
+    batch effects look exactly like signal, and the deployment distribution is rarely the training one.
+    I want to build models for this data <em>and</em> the evaluation protocols that make their reported
+    gains believable.
+  </p>
+</section>
+
+<section>
+  <h2>Directions I'm working toward</h2>
+
+  <div class="entry">
+    <h3>Multimodal perturbational cell-state modeling</h3>
+    <div class="venue">In-progress direction &middot; feedback very welcome</div>
+    <p>
+      Virtual-cell modeling asks a prediction question I find compelling: given a cell in some baseline
+      state and a perturbation applied to it — a compound, a genetic knockout, a dose — what state does the
+      cell move to? The interesting version of the question is multimodal, because the readouts are
+      heterogeneous: high-content imaging, transcriptomic profiles, and perturbation metadata each capture
+      a different projection of the same underlying state transition, and none of them alone is the state.
+    </p>
+    <p>
+      Concretely, the pieces I want to work on:
+    </p>
+    <ul>
+      <li>
+        <strong>A shared latent state across modalities.</strong> Learning a representation in which an
+        imaging readout and a transcriptomic readout of the same perturbed condition land in the same
+        place, so a perturbation can be modeled as an operator on that state rather than as a label
+        attached to one assay.
+      </li>
+      <li>
+        <strong>Generalization to unseen perturbations, not just unseen cells.</strong> The hard split is
+        held-out compounds and held-out doses, not held-out wells. Random splits over wells leak the
+        perturbation identity, and reported performance under them mostly measures memorization — the same
+        failure mode I found in retrieval evaluation, in a different costume.
+      </li>
+      <li>
+        <strong>Evaluation that survives batch effects.</strong> Plate and batch structure correlates with
+        biological condition often enough that a model can score well by reading the batch. Protocols need
+        explicit batch-held-out splits and a null model that is given only the nuisance covariates.
+      </li>
+    </ul>
+    <p>
+      My existing work is the tooling for this rather than a detour from it: multi-modal volumetric data
+      handling and imbalance-aware segmentation from BraTS, large-scale corpus construction and leak
+      detection from the retrieval projects, and the habit of building one entrypoint where every
+      configuration knob is recorded in the checkpoint.
+    </p>
+    <blockquote>
+      <p>
+        This section describes work I am starting rather than results I have. If you work on virtual-cell
+        or perturbation-response modeling and think I have a piece of it wrong, I would genuinely like to
+        hear it — <a href="mailto:yihangj3@illinois.edu">yihangj3@illinois.edu</a>.
+      </p>
+    </blockquote>
+  </div>
+
+  <div class="entry">
+    <h3>Evaluation protocols for retrieval-augmented scientific systems</h3>
+    <p>
+      A continuation of the VibeRepair+ line, aimed at biomedical retrieval. Leave-one-out and
+      random-split protocols are load-bearing in a lot of published RAG results, and they systematically
+      overstate performance whenever the query and the gold document share provenance. The deliverable I
+      care about is a checkable recipe: an external-query construction, a two-stage leak check, and a
+      random-retrieval floor reported alongside every headline number.
+    </p>
+  </div>
+</section>
+
+<section>
+  <h2>Project write-ups</h2>
+  <ul>
+    <li><a href="projects/brats.html">Brain tumor segmentation on multi-modal MRI: U-Net vs. TransUNet</a> — full results table and class-wise analysis.</li>
+    <li><a href="projects/viberepair.html">VibeRepair+</a> — retriever framework and the corrected evaluation protocol.</li>
+    <li><a href="projects/scilit-rag.html">LLM reranking for scientific literature</a> — dueling bandits over LLM judgments, citation-context augmentation.</li>
+  </ul>
+</section>
+
+</main>
+</div>
+
+<footer><div class="wrap">
+  Last updated August 2026 &middot; <a href="index.html">Home</a>
+</div></footer>
+
+</body>
+</html>

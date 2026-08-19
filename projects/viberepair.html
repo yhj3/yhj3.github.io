@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VibeRepair+ — Yihang Jiao</title>
+<meta name="description" content="Retrieval-augmented program repair for Java and Python: a pluggable retriever framework, and a correction to the leave-one-out evaluation protocol that had been measuring a self-match artifact.">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<nav class="top"><div class="wrap">
+  <a class="brand" href="../index.html">Yihang Jiao</a>
+  <div class="links">
+    <a href="../index.html">Home</a>
+    <a href="../research.html">Research</a>
+    <a href="../assets/Yihang_Jiao_CV.pdf">CV</a>
+    <a href="mailto:yihangj3@illinois.edu">Email</a>
+  </div>
+</div></nav>
+
+<div class="wrap">
+<header class="hero">
+  <h1>VibeRepair+</h1>
+  <p class="tagline">
+    Retrieval-augmented program repair for Java and Python &middot; Jan – May 2026<br>
+    <span class="meta">With Yingjia Gu and Shengyue Guo &middot; CS Software Engineering for GenAI, UIUC</span>
+  </p>
+</header>
+
+<main>
+
+<section>
+  <h2>Summary</h2>
+  <p>
+    VibeRepair+ extends a specification-centric repair paradigm to Java and Python with a hybrid retriever
+    (Reciprocal Rank Fusion over parallel dense and lexical retrievers), LLM-based distillation of fix
+    guidance, and removal of an external tool dependency — cutting token consumption from 1,564 to roughly
+    150 tokens per query.
+  </p>
+  <p>
+    My part of the work was the retriever framework and the evaluation. The evaluation is the part I would
+    most want a reviewer to read, because the headline result is that <strong>the protocol everyone was
+    using could not distinguish the retrievers at all</strong>.
+  </p>
+</section>
+
+<section>
+  <h2>A framework where adding a retriever is one file</h2>
+  <p>
+    The retriever layer sits over a <strong>97,402-example</strong> Java bug-fix corpus. Adding a retrieval
+    strategy requires one Python file and <em>zero</em> changes to the serving endpoint, the evaluation
+    harness, or the metrics. Reproducibility is enforced by a SHA-256 fingerprint over the corpus and a
+    locked holdout split, so two runs that report different numbers cannot be silently reading different data.
+  </p>
+  <p>
+    Three retrievers are compared under it: a dense embedding baseline (<span class="mono">ada</span>,
+    ~285&nbsp;ms p50), lexical <span class="mono">BM25-Okapi</span>, and a hybrid that runs both in parallel
+    and fuses by RRF rank summation with <span class="mono">k = 60</span>.
+  </p>
+</section>
+
+<section>
+  <h2>The evaluation was measuring a self-match</h2>
+  <p>
+    The incumbent protocol is leave-one-out over the corpus: hold out an example, query with it, check
+    whether its own fix comes back. Under it, all three retrievers score a perfect recall@1 = 1.000 and
+    MRR@10 = 1.000. That looks like a solved problem.
+  </p>
+  <p>
+    It is an artifact. After excluding the self-match, the retrievers agree on only <strong>34.1%</strong> of
+    top-1 results, with a top-10 Jaccard of <strong>0.166</strong> — three systems returning substantially
+    different evidence, all scoring identically. LOO was measuring whether a document can find itself, which
+    every retriever can do.
+  </p>
+  <p>The replacement protocol:</p>
+  <ul>
+    <li><strong>External queries.</strong> 521 real Defects4J bugs, none drawn from the corpus (533 minus a
+        leak filter, an empty-delta case, and 11 lacking annotations).</li>
+    <li><strong>Operator-aware proxy ground truth.</strong> Unified diffs with Jaccard overlap over tokens,
+        with operators preserved — recovering 170 of 171 bugs that a word-only tokenizer left with empty
+        deltas because the fix was operator-only (<span class="mono">==</span> &rarr; <span class="mono">!=</span>).
+        The top-5 corpus rows by Jaccard form the positive set.</li>
+    <li><strong>A two-stage leak check</strong> (embedding cosine &gt; 0.95 and normalized Levenshtein &gt; 0.95),
+        which finds zero byte-overlap — the evaluation is genuinely external.</li>
+    <li><strong>A random-retrieval floor</strong> reported alongside everything: recall@10 &asymp; 5&times;10<sup>-4</sup>,
+        so the dense baseline at 0.138 is a 276&times; improvement over chance and the task is meaningfully
+        discriminative even where absolute numbers look low.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Results under the corrected protocol</h2>
+  <div class="tablewrap">
+  <table>
+    <caption>External-query retrieval on 521 Defects4J bugs. All three score self-LOO recall@1 = 1.000; that gap is the point.</caption>
+    <thead>
+      <tr><th>Retriever</th><th>r@1</th><th>r@5</th><th>r@10</th><th>MRR</th><th>nDCG</th><th>p50 latency</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>ada (dense)</td><td>.083</td><td>.109</td><td>.138</td><td>.097</td><td>.044</td><td>285 ms</td></tr>
+      <tr><td>BM25 (lexical)</td><td>.085</td><td>.138</td><td>.177</td><td>.111</td><td>.055</td><td>3,756 ms</td></tr>
+      <tr class="best"><td>Hybrid RRF (k = 60)</td><td>.086</td><td>.154</td><td>.190</td><td>.114</td><td>.055</td><td>4,247 ms</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="entry">
+    <h3>Lexical beats dense here, by 27.8% relative</h3>
+    <p>
+      BM25 outperforms the dense baseline on all five quality metrics; binary recall@10 is 0.177 vs. 0.138,
+      a <strong>+27.8% relative</strong> gain (&Delta; = +0.038, above the &plusmn;0.02 standard-error band at
+      N = 521). This inverts the usual dense-beats-lexical assumption, and the reason is domain-specific:
+      Java bug-fix patterns are dominated by API names, class paths, and method signatures — exactly the
+      rare tokens BM25's IDF weighting is built for. The quality comes at a 13&times; latency cost, and BM25's
+      p99 of 38.5&nbsp;s exceeds a typical ~30&nbsp;s LLM-agent per-turn budget, which matters for deployment
+      even though it never shows up in a quality table.
+    </p>
+  </div>
+
+  <div class="entry">
+    <h3>The hybrid's value is per-bug, not in the average</h3>
+    <p>
+      Hybrid RRF leads five of six metrics, but its &Delta; = +0.013 over BM25 sits inside the standard-error
+      band — so the aggregate is not the evidence. The per-bug decomposition is:
+    </p>
+    <div class="tablewrap">
+    <table>
+      <caption>Per-bug top-10 hit decomposition, 521 Defects4J bugs.</caption>
+      <thead><tr><th>Bucket (top-10 hit)</th><th>Count</th><th>Fraction</th></tr></thead>
+      <tbody>
+        <tr><td>All three</td><td>53</td><td>0.102</td></tr>
+        <tr><td>BM25 + hybrid only</td><td>24</td><td>0.046</td></tr>
+        <tr><td>ada + hybrid only</td><td>7</td><td>0.013</td></tr>
+        <tr><td>ada + BM25 only</td><td>1</td><td>0.002</td></tr>
+        <tr><td>BM25 only</td><td>14</td><td>0.027</td></tr>
+        <tr><td>ada only</td><td>11</td><td>0.021</td></tr>
+        <tr class="best"><td>Hybrid only (unique RRF gain)</td><td>15</td><td>0.029</td></tr>
+        <tr><td>Missed by all three</td><td>396</td><td>0.760</td></tr>
+        <tr><td>ada &cup; BM25 oracle ceiling</td><td>110</td><td>0.211</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>
+      <strong>15 bugs</strong> are hit by the hybrid and missed by both sub-retrievers: cases where the
+      positive sits at rank 11–100 for one retriever and RRF surfaces it by summing tail-rank evidence from
+      both top-100 candidate lists. The hybrid realizes 84 of the 110 oracle hits (76.4%); the remaining 24%
+      is the cost of RRF's fairness property, and points at a cascade architecture as the next ablation.
+    </p>
+  </div>
+
+  <div class="entry">
+    <h3>End-to-end repair</h3>
+    <p>
+      On a Defects4J v1.2 subset with Qwen Coder 2.5, VibeRepair+ improved plausible repair rates over the
+      original VibeRepair in all four tested project categories: Chart 53% &rarr; 75%, Closure 22% &rarr; 43%,
+      Lang 63% &rarr; 68%, Math 49% &rarr; 55%. The Python port repairs 26 of 30 BugsInPy single-function bugs (87%).
+    </p>
+  </div>
+</section>
+
+<a class="back" href="../index.html">&larr; Back to home</a>
+</main>
+</div>
+
+<footer><div class="wrap">
+  CS Software Engineering for GenAI, UIUC &middot; <a href="mailto:yihangj3@illinois.edu">yihangj3@illinois.edu</a>
+</div></footer>
+
+</body>
+</html>

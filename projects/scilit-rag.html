@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLM Reranking for Scientific Literature — Yihang Jiao</title>
+<meta name="description" content="Reranking scientific papers with LLM-adjudicated pairwise comparisons treated as a dueling-bandit problem, plus citation-context augmentation over a 10,395-paper corpus.">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<nav class="top"><div class="wrap">
+  <a class="brand" href="../index.html">Yihang Jiao</a>
+  <div class="links">
+    <a href="../index.html">Home</a>
+    <a href="../research.html">Research</a>
+    <a href="../assets/Yihang_Jiao_CV.pdf">CV</a>
+    <a href="mailto:yihangj3@illinois.edu">Email</a>
+  </div>
+</div></nav>
+
+<div class="wrap">
+<header class="hero">
+  <h1>LLM Reranking for Scientific Literature with Citation Context</h1>
+  <p class="tagline">CS 598 Text Mining, UIUC &middot; co-author &middot; Aug – Dec 2024</p>
+</header>
+
+<main>
+
+<section>
+  <h2>Idea</h2>
+  <p>
+    Reranking retrieved papers by asking an LLM to compare candidates pairwise is effective and expensive:
+    exhaustive comparison is <span class="mono">O(N²)</span>, which is 190 pairs at
+    <span class="mono">K = 20</span>. It is also noisy — the same judge can be inconsistent across pairs.
+  </p>
+  <p>
+    Both problems have one shape: noisy pairwise preferences under a comparison budget, i.e. a
+    <strong>dueling bandit</strong>. Applying UCB elimination to the comparison schedule cuts 190 exhaustive
+    pairs to roughly <strong>44</strong>, spending comparisons on candidates that are still plausibly the
+    best rather than on pairs whose outcome is already decided.
+  </p>
+</section>
+
+<section>
+  <h2>Citation context as evidence</h2>
+  <p>
+    Titles and abstracts describe what a paper claims about itself. The sentences in which <em>other</em>
+    papers cite it describe what it is actually used for — which is closer to what a searcher wants.
+  </p>
+  <ul>
+    <li>Built a corpus of <strong>10,395 papers</strong> and <strong>497,210 citation contexts</strong>
+        by breadth-first traversal of L<span style="letter-spacing:-.1em">A</span>T<sub>E</sub>X sources.</li>
+    <li>Augmenting each candidate with its in-link citation context raised
+        <strong>MRR from 0.485 to 0.572</strong> at <span class="mono">K = 5</span>, over reranking on
+        titles and abstracts alone.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Downstream writing pipeline</h2>
+  <p>
+    The retrieval front-end feeds a retrieval-augmented writing pipeline, evaluated for factual consistency
+    against its source material rather than for fluency: <strong>0.64 SummaC<sub>Conv</sub></strong>, close
+    to the <strong>0.65</strong> scored by human-written text, and 0.87 semantic similarity to the human
+    reference.
+  </p>
+</section>
+
+<a class="back" href="../index.html">&larr; Back to home</a>
+</main>
+</div>
+
+<footer><div class="wrap">
+  CS 598 Text Mining, UIUC &middot; <a href="mailto:yihangj3@illinois.edu">yihangj3@illinois.edu</a>
+</div></footer>
+
+</body>
+</html>

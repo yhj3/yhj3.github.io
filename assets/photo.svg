@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <rect width="200" height="200" fill="#eef1f5"/>
+  <circle cx="100" cy="78" r="32" fill="#c9d2dd"/>
+  <path d="M32 200c0-40 31-64 68-64s68 24 68 64z" fill="#c9d2dd"/>
+  <text x="100" y="190" font-family="-apple-system, sans-serif" font-size="11" fill="#8a9099" text-anchor="middle">replace with photo.jpg</text>
+</svg>
