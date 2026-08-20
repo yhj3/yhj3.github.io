@@ -59,57 +59,39 @@
 </section>
 
 <section>
-  <h2>Directions I want to move toward</h2>
+  <h2>What I want to work on next</h2>
 
   <div class="entry">
-    <h3>Multimodal perturbational cell-state modeling</h3>
-    <div class="venue">An interest, not yet a project</div>
+    <h3>Evaluation protocols for machine learning on scientific data</h3>
     <p>
-      I have not worked on this yet. I am describing it here because it is the direction I want my next
-      project to be in, and I would rather say that plainly than imply more than I have done.
+      A continuation of what I ran into in both recent projects. Leave-one-out and random-split
+      protocols are load-bearing in a lot of published results, and they systematically overstate
+      performance whenever the query and the gold answer share provenance — the retrievers in
+      VibeRepair+ all scored a perfect recall@1 under a protocol that was really asking whether a
+      document can find itself. The same shape shows up wherever the split does not hold out the
+      thing the model is supposed to generalize over.
     </p>
     <p>
-      The question: given a cell in some baseline state and a perturbation applied to it — a compound, a
-      genetic knockout, a dose — what state does it move to? What draws me to it is that the readouts are
-      heterogeneous. High-content imaging, transcriptomic profiles, and perturbation metadata each capture
-      a different projection of the same transition, and none of them alone is the state.
+      The deliverable I care about is a checkable recipe rather than a new model: an external-query
+      construction, a two-stage leak check, and a random-retrieval floor reported next to every
+      headline number. Biomedical data makes this sharper, not softer — labels are scarce, positives
+      are rare, and batch structure correlates with condition often enough that a model can score
+      well by reading the batch instead of the biology.
     </p>
-    <p>Two things I would want to understand before claiming anything about it:</p>
-    <ul>
-      <li>
-        <strong>What the evaluation actually holds out.</strong> Whether reported performance survives
-        held-out compounds and held-out doses, rather than held-out wells — splitting over wells leaks the
-        perturbation identity.
-      </li>
-      <li>
-        <strong>How batch structure is separated from biological signal.</strong> Plate and batch correlate
-        with condition often enough that a model can score well by reading the batch instead of the biology.
-      </li>
-    </ul>
-    <p>
-      Both are the same shape as the problem I ran into in retrieval evaluation, which is part of why the
-      area interests me. What I would bring to it is tooling rather than domain expertise: multi-modal
-      volumetric data handling and imbalance-aware segmentation from BraTS, and corpus construction with
-      leak checking from the retrieval projects. The biology I would have to learn.
-    </p>
-    <blockquote>
-      <p>
-        If you work on virtual-cell or perturbation-response modeling and think I have some of this wrong,
-        I would like to hear it — <a href="mailto:yihangj3@illinois.edu">yihangj3@illinois.edu</a>.
-      </p>
-    </blockquote>
   </div>
 
   <div class="entry">
-    <h3>Evaluation protocols for retrieval-augmented scientific systems</h3>
+    <h3>Also interested in: perturbational cell-state modeling</h3>
     <p>
-      A continuation of the VibeRepair+ line, aimed at biomedical retrieval. Leave-one-out and
-      random-split protocols are load-bearing in a lot of published RAG results, and they systematically
-      overstate performance whenever the query and the gold document share provenance. The deliverable I
-      care about is a checkable recipe: an external-query construction, a two-stage leak check, and a
-      random-retrieval floor reported alongside every headline number.
+      Predicting how a cell moves from a baseline state to a new one under a perturbation — a
+      compound, a genetic knockout, a dose — with readouts that are heterogeneous (imaging,
+      transcriptomics, perturbation metadata). I have not worked on this and have not thought it
+      through in detail; I am noting it as an area I find interesting and would like to learn,
+      not as a research plan. If you work on it, I would be glad to hear what I should be reading:
+      <a href="mailto:yihangj3@illinois.edu">yihangj3@illinois.edu</a>.
     </p>
   </div>
+
 </section>
 
 <section>
