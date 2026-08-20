@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Research — Yihang Jiao</title>
 <meta name="description" content="Projects, research experience, and directions: machine learning for biomedical data, robustness of language models, LLM agents, and how these systems are evaluated.">
-<link rel="stylesheet" href="assets/style.css?v=4">
+<link rel="stylesheet" href="assets/style.css?v=5">
 </head>
 <body>
 
@@ -22,7 +22,7 @@
 <div class="wrap">
 <header class="hero">
   <h1>Research</h1>
-  <p class="tagline">Projects, experience, and where I want to take this next.</p>
+  <p class="tagline">What I have worked on, and where I want to take it next.</p>
 </header>
 
 <main>
@@ -30,61 +30,68 @@
 <section id="projects">
   <h2>Projects</h2>
   <ul class="work">
+
     <li>
       <span class="title">Brain Tumor Segmentation on Multi-Modal MRI: U-Net vs. TransUNet</span><br>
       <span class="who">Yihang Jiao.</span>
       <span class="note"><em>Independent project, 2025.</em></span>
-      TransUNet reaches 0.7575 foreground Dice against 0.7326 for the tuned U-Net — but the gain is
-      localized to the diffuse tumor subregion (0.7652 vs. 0.6800), and redesigning the objective
-      alone recovers roughly +7 Dice points on an unchanged architecture.
+      I built one training pipeline in which a U-Net, a configurable U-Net, and a TransUNet can be
+      compared under identical data and training settings, so that a change in the score can be traced
+      to a single deliberate change. Using it, I found that how the loss and the sampler are designed
+      matters about as much as which backbone you choose, and that the transformer's advantage is
+      concentrated on one kind of tumor region rather than spread evenly.
       <div class="brackets">
-        [<a href="projects/brats.html">write-up</a>]
-        [<a href="https://github.com/yhj3/brats-unet-vs-transunet">code</a>]
-        [<a href="https://huggingface.co/yihangj3/brats-transunet">weights</a>]
+        Write-up: <a href="projects/brats.html">yhj3.github.io/projects/brats.html</a><br>
+        Code available: <a href="https://github.com/yhj3/brats-unet-vs-transunet">https://github.com/yhj3/brats-unet-vs-transunet</a><br>
+        Weights available: <a href="https://huggingface.co/yihangj3/brats-transunet">https://huggingface.co/yihangj3/brats-transunet</a>
       </div>
     </li>
+
     <li>
       <span class="title">VibeRepair+: Retrieval-Augmented Program Repair for Java and Python</span><br>
       <span class="who">Yihang Jiao, Yingjia Gu, Shengyue Guo.</span>
       <span class="note"><em>CS Software Engineering for GenAI, 2026.</em></span>
-      The incumbent leave-one-out protocol scores every retriever at a perfect recall@1 while they
-      agree on only 34.1% of top-1 results. Under an external-query protocol on 521 Defects4J bugs,
-      lexical BM25 beats the dense baseline by 27.8% relative recall@10.
+      I built a retriever framework for LLM program repair in which swapping in a new retrieval
+      strategy takes one file, and then found that the evaluation everyone was using could not tell
+      the retrievers apart — it was really asking whether a document can find itself, so every
+      retriever scored perfectly. I designed a replacement protocol on real bugs, under which the
+      ranking of the retrievers reverses and a simple lexical method beats the dense baseline.
       <div class="brackets">
-        [<a href="projects/viberepair.html">write-up</a>]
-        [<a href="https://github.com/yhj3/Vibe_Repair_Plus">code</a>]
+        Write-up: <a href="projects/viberepair.html">yhj3.github.io/projects/viberepair.html</a><br>
+        Code available: <a href="https://github.com/yhj3/Vibe_Repair_Plus">https://github.com/yhj3/Vibe_Repair_Plus</a>
       </div>
     </li>
-    <li>
-      <span class="title">LLM Reranking for Scientific Literature with Citation Context</span><br>
-      <span class="who">Yihang Jiao and co-authors.</span>
-      <span class="note"><em>CS 598 Text Mining, 2024.</em></span>
-      Treating noisy LLM pairwise judgments as a dueling-bandit problem cuts 190 exhaustive
-      comparisons to roughly 44; in-link citation context raises MRR from 0.485 to 0.572 at K=5.
-      <div class="brackets">
-        [<a href="projects/scilit-rag.html">write-up</a>]
-      </div>
-    </li>
-  </ul>
-</section>
 
-<section id="experience">
-  <h2>Research Experience</h2>
-  <p>
-    <span class="title">Research Assistant</span>, FOCAL Lab,
-    UIUC — with Prof. <a href="https://ggndpsngh.github.io/">Gagandeep Singh</a>.
-    <span class="meta">Aug – Dec 2024.</span>
-  </p>
-  <p>
-    I built a hybrid adversarial-attack framework that pairs LLaMA-2 counterfactual generation with a
-    three-stage semantic filter (label-flip rate ≥ 0.6, embedding cosine similarity ≥ 0.75, GPT-2-XL
-    perplexity ≤ 150), to see how classifiers hold up against attacks that rewrite a sentence rather
-    than swap words in it. Filtering discarded 37.7% of generated candidates while keeping 91% of the
-    effective ones, raising attack success from 68.2% to 85.1% on RoBERTa-Large and 71.4% to 79.8% on
-    BERT-Base. What I found most interesting is that inference-style tasks (RTE, QNLI; +11.3% on
-    average) benefit far more from generative rewriting than sentiment tasks do, where swapping a
-    single word is already enough.
-  </p>
+    <li>
+      <span class="title">LLM RAG Reranker with Pairwise Comparison and Citation Context</span><br>
+      <span class="who">Yexin Wu, Yihang Jiao.</span>
+      <span class="note"><em>CS 598 Text Mining, 2024.</em></span>
+      Search over papers ranks them by what they say about themselves. We reranked candidates by
+      letting a language model compare them two at a time, and made that affordable by treating its
+      noisy judgments as a bandit problem so most comparisons can be skipped. We also built a corpus
+      of citation contexts, so the reranker can see how a paper is actually used by others rather than
+      only how it describes itself.
+      <div class="brackets">
+        Write-up: <a href="projects/scilit-rag.html">yhj3.github.io/projects/scilit-rag.html</a>
+      </div>
+    </li>
+
+    <li>
+      <span class="title">Using Counterfactuals to Attack Text Classifiers</span><br>
+      <span class="who">Yihang Jiao.</span>
+      <span class="note"><em>Research assistant, FOCAL Lab, with Prof.
+      <a href="https://ggndpsngh.github.io/">Gagandeep Singh</a>, 2024.</em></span>
+      Standard attacks on text classifiers swap individual words for synonyms. I had a language model
+      rewrite whole sentences instead, and added a filter that keeps only rewrites that still mean what
+      the original meant — which is what makes a generated attack count as evidence rather than noise.
+      The rewriting helps most on tasks that require reasoning across sentences, and larger models turn
+      out to be the more vulnerable ones.
+      <div class="brackets">
+        Code available: <span class="meta">on request — the lab repository is not yet public</span>
+      </div>
+    </li>
+
+  </ul>
 </section>
 
 <section id="next">
