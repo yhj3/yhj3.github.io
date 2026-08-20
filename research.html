@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Research — Yihang Jiao</title>
 <meta name="description" content="Projects, research experience, and directions: machine learning for biomedical data, robustness of language models, LLM agents, and how these systems are evaluated.">
-<link rel="stylesheet" href="assets/style.css?v=8">
+<link rel="stylesheet" href="assets/style.css?v=9">
 </head>
 <body>
 
@@ -35,13 +35,14 @@
       <span class="title">Brain Tumor Segmentation on Multi-Modal MRI: U-Net vs. TransUNet</span><br>
       <span class="who">Yihang Jiao.</span>
       <span class="note"><em>Independent project, 2025.</em></span>
-      This is where I first learned to handle biomedical data. I built one pipeline in which a U-Net,
-      a configurable U-Net, and a TransUNet train under identical data and training settings, so that
-      a change in the score can be traced to a single deliberate change. I expected a larger model to
-      perform better. Making the U-Net deeper hurt performance, while fixing only the loss function
-      improved it by roughly seven Dice points on an unchanged architecture. And even when the hybrid
-      ResNet-ViT reached the best overall score, the improvement came almost entirely from one diffuse
-      tumor subregion. This taught me not to trust a single averaged metric.
+      I built a 2D segmentation pipeline for four MRI modalities (FLAIR, T1, T1-CE, T2). A U-Net, a
+      configurable U-Net, and a TransUNet all train through one entrypoint under the same data and
+      training settings, so the three can be compared fairly. The data path does brain-region
+      cropping, skips empty slices, normalizes each slice, and oversamples slices that contain tumor
+      to handle the class imbalance. TransUNet reached 0.7575 foreground Dice and the tuned U-Net
+      0.7326. Changing only the loss function, without touching the architecture, was worth about 7
+      Dice points. The class-wise numbers show the transformer's gain comes from one diffuse tumor
+      subregion (0.7652 against 0.6800) rather than from the compact ones.
       <div class="brackets">
         Paper: <a href="assets/papers/brats-unet-vs-transunet.pdf">yhj3.github.io/assets/papers/brats-unet-vs-transunet.pdf</a><br>
         Write-up: <a href="projects/brats.html">yhj3.github.io/projects/brats.html</a><br>
@@ -54,13 +55,13 @@
       <span class="title">VibeRepair+: Retrieval-Augmented Program Repair for Java and Python</span><br>
       <span class="who">Yihang Jiao, Yingjia Gu, Shengyue Guo.</span>
       <span class="note"><em>CS Software Engineering for GenAI, 2026.</em></span>
-      My main contribution was the evaluation. At first we tested retrievers by asking them to find a
-      bug inside the same 97k database they were built from, and every retriever received a perfect
-      score of 1.000. I designed a simple check and found that this score was not meaningful:
-      different retrievers agreed on only 34.1% of their top results. To fix this I built a pluggable
-      retriever framework and a new external evaluation on 521 real, unseen bugs from Defects4J. Under
-      the fair test a simple lexical method outperformed the dense embedding by 27.8%. This taught me
-      that a benchmark can easily confirm itself if we do not question how it is built.
+      I built a pluggable retriever framework over a corpus of 97,402 bug-fix examples, where adding a
+      new retrieval method takes one Python file. I also rebuilt the evaluation. The original test
+      asked each retriever to find a bug inside the same database it was built from, and every
+      retriever scored 1.000, but the retrievers agreed on only 34.1% of their top results. I designed
+      an external test on 521 real Defects4J bugs, with a token-overlap ground truth and a two-stage
+      leak check. Under this test BM25, a simple word-matching method, beat the dense embedding by
+      27.8% on recall@10, and a rank-fusion hybrid led five of six metrics.
       <div class="brackets">
         Paper: <a href="assets/papers/viberepair-plus.pdf">yhj3.github.io/assets/papers/viberepair-plus.pdf</a><br>
         Write-up: <a href="projects/viberepair.html">yhj3.github.io/projects/viberepair.html</a><br>
@@ -73,13 +74,14 @@
       <span class="who">Yihang Jiao.</span>
       <span class="note"><em>Research assistant, FOCAL Lab, with Prof.
       <a href="https://ggndpsngh.github.io/">Gagandeep Singh</a>, 2024; revised 2026.</em></span>
-      Standard attacks on text classifiers replace single words with synonyms. I tried having a
-      language model rewrite whole sentences instead, and the rewrites read far more naturally. When I
-      returned to this work a year later and ran the classifier on the rewrites, which the original
-      evaluation had never done, only 44.5% of the attacks survived. The prompt that preserved them
-      best turned out to work by instructing the model to change the topic, which produces a different
-      input rather than an attack. This taught me my most important lesson, and I learned it from my
-      own mistake: a number can look like evidence while measuring something else entirely.
+      Standard attacks on text classifiers replace single words with synonyms. I had LLaMA-2 rewrite
+      whole sentences instead, over 8 datasets and 2 victim models. A year later I ran the classifier
+      on the rewrites, which the first version of this work had not done, and only 44.5% of the
+      attacks still worked. The rewrites are much easier to read (median perplexity 22.9 against 522),
+      so the method trades attack strength for fluency. I then ran a task-specific and a generic
+      prompt on the same data: the task-specific one keeps about twice as many attacks (119 of 180
+      against 58 of 180). On topic classification it does this by telling the model to change the
+      topic, which gives a different input rather than an attack.
       <div class="brackets">
         Paper (revised): <a href="assets/papers/counterfactual-textattack-revised.pdf">yhj3.github.io/assets/papers/counterfactual-textattack-revised.pdf</a><br>
         Paper (original 2024): <a href="assets/papers/counterfactual-textattack.pdf">yhj3.github.io/assets/papers/counterfactual-textattack.pdf</a><br>
@@ -91,12 +93,11 @@
       <span class="title">LLM RAG Reranker with Pairwise Comparison and Citation Context</span><br>
       <span class="who">Yexin Wu, Yihang Jiao.</span>
       <span class="note"><em>CS 598 Text Mining, 2024.</em></span>
-      Search over papers ranks them by what they say about themselves, which is a poor guide to how
-      useful a paper actually is. We reranked candidates by letting a language model compare them two
-      at a time, and treated its noisy judgments as a bandit problem so that most comparisons could be
-      skipped. We also collected the citation contexts of each paper, so that the reranker could see
-      how a paper is used by others rather than only how it describes itself. This raised MRR from
-      0.485 to 0.572.
+      Search over papers ranks them by their own title and abstract. We reranked the candidates by
+      asking a language model to compare them two at a time, and treated the noisy comparisons as a
+      bandit problem so that most pairs could be skipped, from about 190 down to 44. We also collected
+      10,395 papers and 497,210 citation contexts, so the reranker could see how a paper is used by
+      others. This raised MRR from 0.485 to 0.572.
       <div class="brackets">
         Paper: <a href="assets/papers/llm-rag-reranker.pdf">yhj3.github.io/assets/papers/llm-rag-reranker.pdf</a><br>
         Write-up: <a href="projects/scilit-rag.html">yhj3.github.io/projects/scilit-rag.html</a>
@@ -110,23 +111,24 @@
   <h2>What I want to work on next</h2>
   <p>
     <span class="title">Evaluation protocols for machine learning on scientific data.</span>
-    Leave-one-out and random splits are used to support many published results, and they overstate
-    performance whenever the query and the answer come from the same source. In VibeRepair+ every
-    retriever received a perfect score under a protocol that was really asking whether a document can
-    find itself. The same shape appears wherever the split does not hold out the thing the model is
-    supposed to generalize over. What I would like to build is a checkable recipe rather than a new
-    model: a way to construct external queries, a two-stage leak check, and a random-retrieval floor
-    reported next to every headline number. Biomedical data makes this sharper rather than softer,
-    because labels are scarce, positives are rare, and batch structure often correlates with
-    condition closely enough that a model can score well by reading the batch instead of the biology.
+    Leave-one-out and random splits sit behind a lot of published results, and they overstate
+    performance whenever the question and the answer come from the same source. In VibeRepair+ every
+    retriever scored 1.000 under a test that was really asking whether a document can find itself.
+    The same shape shows up wherever the split does not hold out the thing the model is supposed to
+    generalize over. I would like to build a recipe that can be checked rather than a new model: a
+    way to construct queries from outside the corpus, a two-stage leak check, and a random-retrieval
+    floor reported next to every headline number. Biomedical data makes this harder, not easier,
+    because the labels are few, the positive cases are rare, and which plate or batch a sample came
+    from often lines up with the condition closely enough that a model can score well by reading the
+    batch instead of the biology.
   </p>
   <p>
     <span class="title">Also interested in: perturbational cell-state modeling.</span>
     A protein's structure is mostly decided by its sequence, but a cell's state is decided by many
-    things together, such as gene expression, protein abundance, and spatial organization. We almost
-    never measure all of them in the same cell at the same time, so the modeling problem is also an
-    information problem. I have not worked on this and have not thought it through in detail; I note
-    it as an area I find interesting and would like to learn.
+    things at once, such as gene expression, protein abundance, and spatial organization. We almost
+    never measure all of them in the same cell at the same time, so the modeling problem is also a
+    problem of combining incomplete measurements. I have not worked on this yet, and I note it as an
+    area I would like to learn.
   </p>
 </section>
 
