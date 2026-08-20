@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Research — Yihang Jiao</title>
-<meta name="description" content="Research interests and directions: machine learning for biomedical data, perturbational cell-state modeling, and evaluation protocols that do not leak.">
-<link rel="stylesheet" href="assets/style.css?v=3">
+<meta name="description" content="Projects, research experience, and directions: machine learning for biomedical data, robustness of language models, LLM agents, and how these systems are evaluated.">
+<link rel="stylesheet" href="assets/style.css?v=4">
 </head>
 <body>
 
@@ -22,92 +22,97 @@
 <div class="wrap">
 <header class="hero">
   <h1>Research</h1>
-  <p class="tagline">What I work on, and where I am trying to take it.</p>
+  <p class="tagline">Projects, experience, and where I want to take this next.</p>
 </header>
 
 <main>
 
-<section>
-  <h2>Interests</h2>
-  <p>
-    Machine learning for biomedical data: <strong>medical image segmentation</strong>, <strong>biomedical
-    literature and knowledge retrieval</strong>, and <strong>reliable evaluation of deep models</strong>
-    under class imbalance, limited supervision, and distribution shift.
-  </p>
-  <p>
-    The last one is not a footnote to the first two. In both of my recent projects, the most consequential
-    finding came from the measurement rather than the model:
-  </p>
-  <ul>
+<section id="projects">
+  <h2>Projects</h2>
+  <ul class="work">
     <li>
-      On <a href="projects/brats.html">BraTS</a>, computing Dice only over classes actually present in a
-      batch changed what the number meant — naive Dice is inflated by absent classes, and a model can look
-      good on a metric that is mostly rewarding it for empty background.
+      <span class="title">Brain Tumor Segmentation on Multi-Modal MRI: U-Net vs. TransUNet</span><br>
+      <span class="who">Yihang Jiao.</span>
+      <span class="note"><em>Independent project, 2025.</em></span>
+      TransUNet reaches 0.7575 foreground Dice against 0.7326 for the tuned U-Net — but the gain is
+      localized to the diffuse tumor subregion (0.7652 vs. 0.6800), and redesigning the objective
+      alone recovers roughly +7 Dice points on an unchanged architecture.
+      <div class="brackets">
+        [<a href="projects/brats.html">write-up</a>]
+        [<a href="https://github.com/yhj3/brats-unet-vs-transunet">code</a>]
+        [<a href="https://huggingface.co/yihangj3/brats-transunet">weights</a>]
+      </div>
     </li>
     <li>
-      In <a href="projects/viberepair.html">VibeRepair+</a>, the field-standard leave-one-out retrieval
-      evaluation gave every retriever a perfect recall@1 while those retrievers agreed on only 34.1% of
-      their top-1 results. The protocol was measuring whether a document can find itself.
+      <span class="title">VibeRepair+: Retrieval-Augmented Program Repair for Java and Python</span><br>
+      <span class="who">Yihang Jiao, Yingjia Gu, Shengyue Guo.</span>
+      <span class="note"><em>CS Software Engineering for GenAI, 2026.</em></span>
+      The incumbent leave-one-out protocol scores every retriever at a perfect recall@1 while they
+      agree on only 34.1% of top-1 results. Under an external-query protocol on 521 Defects4J bugs,
+      lexical BM25 beats the dense baseline by 27.8% relative recall@10.
+      <div class="brackets">
+        [<a href="projects/viberepair.html">write-up</a>]
+        [<a href="https://github.com/yhj3/Vibe_Repair_Plus">code</a>]
+      </div>
+    </li>
+    <li>
+      <span class="title">LLM Reranking for Scientific Literature with Citation Context</span><br>
+      <span class="who">Yihang Jiao and co-authors.</span>
+      <span class="note"><em>CS 598 Text Mining, 2024.</em></span>
+      Treating noisy LLM pairwise judgments as a dueling-bandit problem cuts 190 exhaustive
+      comparisons to roughly 44; in-link citation context raises MRR from 0.485 to 0.572 at K=5.
+      <div class="brackets">
+        [<a href="projects/scilit-rag.html">write-up</a>]
+      </div>
     </li>
   </ul>
+</section>
+
+<section id="experience">
+  <h2>Research Experience</h2>
   <p>
-    Biomedical settings make this worse, not better: labels are scarce and expensive, positives are rare,
-    batch effects look exactly like signal, and the deployment distribution is rarely the training one.
-    I want to build models for this data <em>and</em> the evaluation protocols that make their reported
-    gains believable.
+    <span class="title">Research Assistant</span>, FOCAL Lab,
+    UIUC — with Prof. <a href="https://ggndpsngh.github.io/">Gagandeep Singh</a>.
+    <span class="meta">Aug – Dec 2024.</span>
+  </p>
+  <p>
+    I built a hybrid adversarial-attack framework that pairs LLaMA-2 counterfactual generation with a
+    three-stage semantic filter (label-flip rate ≥ 0.6, embedding cosine similarity ≥ 0.75, GPT-2-XL
+    perplexity ≤ 150), to see how classifiers hold up against attacks that rewrite a sentence rather
+    than swap words in it. Filtering discarded 37.7% of generated candidates while keeping 91% of the
+    effective ones, raising attack success from 68.2% to 85.1% on RoBERTa-Large and 71.4% to 79.8% on
+    BERT-Base. What I found most interesting is that inference-style tasks (RTE, QNLI; +11.3% on
+    average) benefit far more from generative rewriting than sentiment tasks do, where swapping a
+    single word is already enough.
   </p>
 </section>
 
-<section>
+<section id="next">
   <h2>What I want to work on next</h2>
-
-  <div class="entry">
-    <h3>Evaluation protocols for machine learning on scientific data</h3>
-    <p>
-      A continuation of what I ran into in both recent projects. Leave-one-out and random-split
-      protocols are load-bearing in a lot of published results, and they systematically overstate
-      performance whenever the query and the gold answer share provenance — the retrievers in
-      VibeRepair+ all scored a perfect recall@1 under a protocol that was really asking whether a
-      document can find itself. The same shape shows up wherever the split does not hold out the
-      thing the model is supposed to generalize over.
-    </p>
-    <p>
-      The deliverable I care about is a checkable recipe rather than a new model: an external-query
-      construction, a two-stage leak check, and a random-retrieval floor reported next to every
-      headline number. Biomedical data makes this sharper, not softer — labels are scarce, positives
-      are rare, and batch structure correlates with condition often enough that a model can score
-      well by reading the batch instead of the biology.
-    </p>
-  </div>
-
-  <div class="entry">
-    <h3>Also interested in: perturbational cell-state modeling</h3>
-    <p>
-      Predicting how a cell moves from a baseline state to a new one under a perturbation — a
-      compound, a genetic knockout, a dose — with readouts that are heterogeneous (imaging,
-      transcriptomics, perturbation metadata). I have not worked on this and have not thought it
-      through in detail; I am noting it as an area I find interesting and would like to learn,
-      not as a research plan. If you work on it, I would be glad to hear what I should be reading:
-      <a href="mailto:yihangj3@illinois.edu">yihangj3@illinois.edu</a>.
-    </p>
-  </div>
-
-</section>
-
-<section>
-  <h2>Project write-ups</h2>
-  <ul>
-    <li><a href="projects/brats.html">Brain tumor segmentation on multi-modal MRI: U-Net vs. TransUNet</a> — full results table and class-wise analysis.</li>
-    <li><a href="projects/viberepair.html">VibeRepair+</a> — retriever framework and the corrected evaluation protocol.</li>
-    <li><a href="projects/scilit-rag.html">LLM reranking for scientific literature</a> — dueling bandits over LLM judgments, citation-context augmentation.</li>
-  </ul>
+  <p>
+    <span class="title">Evaluation protocols for machine learning on scientific data.</span>
+    Leave-one-out and random-split protocols are load-bearing in a lot of published results, and they
+    overstate performance whenever the query and the gold answer share provenance — the retrievers in
+    VibeRepair+ all scored a perfect recall@1 under a protocol that was really asking whether a
+    document can find itself. The same shape shows up wherever the split does not hold out the thing
+    the model is supposed to generalize over. What I would like to build is a checkable recipe rather
+    than a new model: an external-query construction, a two-stage leak check, and a random-retrieval
+    floor reported next to every headline number.
+  </p>
+  <p>
+    <span class="title">Also interested in: perturbational cell-state modeling.</span>
+    Predicting how a cell moves from a baseline state to a new one under a perturbation, with readouts
+    that are heterogeneous — imaging, transcriptomics, perturbation metadata. I have not worked on this
+    and have not thought it through in detail; I note it as something I find interesting and would like
+    to learn. If you work on it, I would be glad to hear what I should be reading.
+  </p>
 </section>
 
 </main>
 </div>
 
 <footer><div class="wrap">
-  Last updated August 2026 &middot; <a href="index.html">Home</a>
+  <a href="index.html">Home</a> · <a href="mailto:yihangj3@illinois.edu">yihangj3@illinois.edu</a>
 </div></footer>
 
 </body>

@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Yihang Jiao</title>
-<meta name="description" content="Yihang Jiao — Master of Computer Science student at the University of Illinois Urbana-Champaign, working on machine learning for biomedical data and on how these models are evaluated.">
-<link rel="stylesheet" href="assets/style.css?v=3">
+<meta name="description" content="Yihang Jiao — Master of Computer Science student at the University of Illinois Urbana-Champaign. AI for bio, AI safety, and AI agents.">
+<link rel="stylesheet" href="assets/style.css?v=4">
 </head>
 <body>
 
@@ -27,24 +27,33 @@
   <div class="row">
     <div class="txt">
       <p>
-        Hi! I'm Yihang Jiao, a <strong>Master of Computer Science</strong> student at the
-        <a href="https://siebelschool.illinois.edu/">University of Illinois Urbana-Champaign</a>,
-        where I also received my <strong>B.S. in Mathematics and Computer Science</strong>.
+        Hi! I'm Yihang Jiao, a Master of Computer Science (MCS) student at the
+        <a href="https://siebelschool.illinois.edu/">University of Illinois Urbana-Champaign</a> (UIUC),
+        where I also received my B.S. in Mathematics and Computer Science. Previously I was a research
+        assistant at FOCAL Lab with Prof.
+        <a href="https://ggndpsngh.github.io/">Gagandeep Singh</a>, working on the robustness of neural
+        language models.
       </p>
+      <p>My research interests lie in:</p>
+      <ul>
+        <li>
+          <strong>AI for Bio</strong>: I want to build models that survive contact with real biomedical
+          data, where labels are scarce, positives are rare, and a good average can hide a bad result
+          on the case that actually matters.
+        </li>
+        <li>
+          <strong>AI Safety</strong>: I am interested in how language models behave when someone is
+          deliberately trying to break them, and in what that reveals about what they have really learned.
+        </li>
+        <li>
+          <strong>AI Agents</strong>: I enjoy building LLM agents for concrete tasks — repairing real
+          bugs, finding the right paper — and then checking honestly whether they work.
+        </li>
+      </ul>
       <p>
-        I work on <strong>machine learning for biomedical data</strong>: medical image segmentation,
-        biomedical and scientific literature retrieval, and how these models are evaluated. Evaluation
-        is what I keep coming back to, and it feels a lot like grading a student's work — a model can
-        reach the right answer for the wrong reason, and unless the test is built to tell the
+        Running through all three is evaluation, which feels a lot like grading a student's work: a model
+        can reach the right answer for the wrong reason, and unless the test is built to tell the
         difference, the score flatters everyone.
-      </p>
-      <p>
-        I like the moment a pipeline becomes honest enough that a number can be traced back to the one
-        setting that produced it. On brain tumor segmentation, that meant discovering that redesigning
-        the loss and the sampler moved Dice about as much as changing the backbone did. In a retrieval
-        project, it meant finding that the standard protocol handed every retriever a perfect recall@1
-        while those retrievers agreed on only 34.1% of their top results — the test was really asking
-        whether a document could find itself.
       </p>
     </div>
     <div class="side">
@@ -62,85 +71,16 @@
 
 <main>
 
-<section id="work">
-  <h2>Recent Work</h2>
-  <ul class="work">
-    <li>
-      <span class="title">Brain Tumor Segmentation on Multi-Modal MRI: U-Net vs. TransUNet</span><br>
-      <span class="who">Yihang Jiao.</span>
-      <span class="note"><em>Independent project, 2025.</em></span>
-      TransUNet reaches 0.7575 foreground Dice against 0.7326 for the tuned U-Net — but the gain is
-      localized to the diffuse tumor subregion (0.7652 vs. 0.6800), and redesigning the objective
-      alone recovers roughly +7 Dice points on an unchanged architecture.
-      <div class="brackets">
-        [<a href="projects/brats.html">write-up</a>]
-        [<a href="https://github.com/yhj3/brats-unet-vs-transunet">code</a>]
-        [<a href="https://huggingface.co/yihangj3/brats-transunet">weights</a>]
-      </div>
-    </li>
-    <li>
-      <span class="title">VibeRepair+: Retrieval-Augmented Program Repair for Java and Python</span><br>
-      <span class="who">Yihang Jiao, Yingjia Gu, Shengyue Guo.</span>
-      <span class="note"><em>CS Software Engineering for GenAI, 2026.</em></span>
-      The incumbent leave-one-out protocol scores every retriever at a perfect recall@1 while they
-      agree on only 34.1% of top-1 results. Under an external-query protocol on 521 Defects4J bugs,
-      lexical BM25 beats the dense baseline by 27.8% relative recall@10.
-      <div class="brackets">
-        [<a href="projects/viberepair.html">write-up</a>]
-        [<a href="https://github.com/yhj3/Vibe_Repair_Plus">code</a>]
-      </div>
-    </li>
-    <li>
-      <span class="title">LLM Reranking for Scientific Literature with Citation Context</span><br>
-      <span class="who">Yihang Jiao and co-authors.</span>
-      <span class="note"><em>CS 598 Text Mining, 2024.</em></span>
-      Treating noisy LLM pairwise judgments as a dueling-bandit problem cuts 190 exhaustive
-      comparisons to roughly 44; in-link citation context raises MRR from 0.485 to 0.572 at K=5.
-      <div class="brackets">
-        [<a href="projects/scilit-rag.html">write-up</a>]
-      </div>
-    </li>
-  </ul>
-</section>
-
-<section id="experience">
-  <h2>Research Experience</h2>
-  <p>
-    <strong>Research Assistant</strong>, FOCAL Lab, UIUC — with Prof.
-    <a href="https://ggndpsngh.github.io/">Gagandeep Singh</a>, Aug–Dec 2024.
-  </p>
-  <p>
-    I built a hybrid adversarial-attack framework that pairs LLaMA-2 counterfactual generation with a
-    three-stage semantic filter (label-flip rate ≥ 0.6, embedding cosine similarity ≥ 0.75, GPT-2-XL
-    perplexity ≤ 150), to see how classifiers hold up against attacks that rewrite a sentence rather
-    than swap words in it. Filtering discarded 37.7% of generated candidates while keeping 91% of the
-    effective ones, raising attack success from 68.2% to 85.1% on RoBERTa-Large. What I found most
-    interesting is that inference-style tasks (RTE, QNLI; +11.3% on average) benefit far more from
-    generative rewriting than sentiment tasks do, where swapping a single word is already enough.
-  </p>
-</section>
-
 <section id="education">
   <h2>Education</h2>
   <div class="kv">
-    <div><strong>University of Illinois Urbana-Champaign</strong> — Master of Computer Science, GPA 3.91/4.0</div>
+    <div>Master of Computer Science, University of Illinois Urbana-Champaign — GPA 3.91/4.0</div>
     <div class="r">Expected Dec 2027</div>
-    <div><strong>University of Illinois Urbana-Champaign</strong> — B.S. in Mathematics and Computer Science, GPA 3.83/4.0</div>
+    <div>B.S. in Mathematics and Computer Science, University of Illinois Urbana-Champaign — GPA 3.83/4.0</div>
     <div class="r">May 2025</div>
   </div>
-  <p class="meta" style="margin-top:12px">
-    Deep Learning · Machine Learning Theory · Applied Machine Learning · Text Mining ·
-    Software Engineering for GenAI · Statistics and Probability · Algorithms
-  </p>
-</section>
-
-<section id="contact">
-  <h2>Contact</h2>
-  <p>
-    <a href="mailto:yihangj3@illinois.edu">yihangj3@illinois.edu</a> is the fastest way to reach me.
-    I am always glad to talk about machine learning for biomedical data, and about how these systems
-    are evaluated — if you think one of the numbers on this site deserves a harder test, I would
-    genuinely like to hear it.
+  <p class="meta" style="margin-top:14px">
+    See <a href="research.html">Research</a> for project write-ups, code, and results.
   </p>
 </section>
 
