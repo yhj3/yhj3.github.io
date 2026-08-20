@@ -9,7 +9,7 @@
   --link-hover: #0f2f66;
   --accent-bg: #f5f7fa;
   --code-bg: #f2f4f7;
-  --maxw: 760px;
+  --maxw: 820px;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -59,12 +59,21 @@ nav.top .links a { color: var(--muted); font-size: 15px; }
 nav.top .links a.here { color: var(--fg); font-weight: 600; }
 
 header.hero { padding: 44px 0 8px; }
-header.hero .row { display: flex; gap: 30px; align-items: flex-start; }
-header.hero .txt { flex: 1 1 auto; min-width: 0; }
 header.hero h1 { font-size: 30px; line-height: 1.2; margin: 0 0 6px; letter-spacing: -.01em; }
 header.hero .tagline { color: var(--muted); margin: 0 0 14px; }
+
+/* home: centered name, then text + portrait column */
+header.home { padding: 40px 0 4px; }
+header.home h1.name {
+  font-size: 38px; font-weight: 400; letter-spacing: .06em;
+  text-align: center; margin: 0 0 34px; text-transform: uppercase;
+}
+header.home .row { display: flex; gap: 34px; align-items: flex-start; }
+header.home .txt { flex: 1 1 auto; min-width: 0; }
+header.home .side { flex: 0 0 172px; text-align: center; }
+header.home .side .links { margin-top: 12px; font-size: 14.5px; line-height: 1.9; color: var(--muted); }
 .portrait {
-  width: 172px; height: auto; flex: 0 0 auto; border-radius: 6px;
+  width: 172px; height: auto; border-radius: 4px;
   display: block; background: var(--accent-bg); border: 1px solid var(--rule);
 }
 
@@ -122,8 +131,20 @@ footer {
 }
 .back { font-size: 14.5px; color: var(--muted); display: inline-block; margin: 28px 0 4px; }
 
+/* bracketed link rows, e.g. [Details] [Code] [Weights] */
+.brackets { font-size: 14.5px; color: var(--muted); }
+.brackets a { white-space: nowrap; }
+
+.work { margin: 0; padding-left: 20px; }
+.work > li { margin-bottom: 20px; }
+.work .title { font-weight: 650; }
+.work .who { color: var(--muted); }
+.work .note { display: block; margin: 2px 0 3px; }
+
 @media (max-width: 620px) {
-  header.hero .row { flex-direction: column-reverse; align-items: flex-start; gap: 18px; }
+  header.home .row { flex-direction: column-reverse; align-items: flex-start; gap: 18px; }
+  header.home h1.name { font-size: 30px; margin-bottom: 24px; }
+  header.home .side { flex: none; text-align: left; }
   .portrait { width: 128px; }
   header.hero h1 { font-size: 26px; }
 }

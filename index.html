@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Yihang Jiao</title>
-<meta name="description" content="Yihang Jiao — MSCS student at the University of Illinois Urbana-Champaign. Machine learning for biomedical data: medical image segmentation, biomedical retrieval, and reliable evaluation.">
-<link rel="stylesheet" href="assets/style.css">
+<meta name="description" content="Yihang Jiao — Master of Computer Science student at the University of Illinois Urbana-Champaign, working on machine learning for biomedical data and on how these models are evaluated.">
+<link rel="stylesheet" href="assets/style.css?v=3">
 </head>
 <body>
 
@@ -21,162 +21,126 @@
 
 <div class="wrap">
 
-<header class="hero">
+<header class="home">
+  <!-- 想加中文名就写成: Yihang Jiao (焦一航) -->
+  <h1 class="name">Yihang Jiao</h1>
   <div class="row">
     <div class="txt">
-      <!-- 想加中文名就写成: Yihang Jiao (焦一航) -->
-      <h1>Yihang Jiao</h1>
-      <p class="tagline">M.S. in Computer Science, University of Illinois Urbana-Champaign</p>
       <p>
-        I build and evaluate machine learning systems for biomedical and scientific data. My work so far
-        spans <strong>medical image segmentation</strong> (multi-modal MRI), <strong>biomedical and scientific
-        literature retrieval</strong>, and <strong>reliable evaluation</strong> of deep models under class
-        imbalance, limited supervision, and distribution shift.
+        Hi! I'm Yihang Jiao, a <strong>Master of Computer Science</strong> student at the
+        <a href="https://siebelschool.illinois.edu/">University of Illinois Urbana-Champaign</a>,
+        where I also received my <strong>B.S. in Mathematics and Computer Science</strong>.
       </p>
       <p>
-        In both of my recent projects, a large part of the result came from measurement details. On BraTS,
-        redesigning the loss and sampler changed foreground Dice by about as much as changing the backbone
-        did. In retrieval-augmented program repair, the standard leave-one-out protocol gave every retriever
-        a perfect recall@1, while those same retrievers agreed on only 34.1% of their top-1 results. I try to
-        build pipelines where a reported number can be traced back to the specific setting that produced it.
+        I work on <strong>machine learning for biomedical data</strong>: medical image segmentation,
+        biomedical and scientific literature retrieval, and how these models are evaluated. Evaluation
+        is what I keep coming back to, and it feels a lot like grading a student's work — a model can
+        reach the right answer for the wrong reason, and unless the test is built to tell the
+        difference, the score flatters everyone.
       </p>
-      <p class="meta">
-        <a href="mailto:yihangj3@illinois.edu">yihangj3@illinois.edu</a> &middot;
-        <a href="https://www.linkedin.com/in/yihang-jiao-587885221">LinkedIn</a> &middot;
-        <a href="assets/Yihang_Jiao_CV.pdf">CV (PDF)</a>
+      <p>
+        I like the moment a pipeline becomes honest enough that a number can be traced back to the one
+        setting that produced it. On brain tumor segmentation, that meant discovering that redesigning
+        the loss and the sampler moved Dice about as much as changing the backbone did. In a retrieval
+        project, it meant finding that the standard protocol handed every retriever a perfect recall@1
+        while those retrievers agreed on only 34.1% of their top results — the test was really asking
+        whether a document could find itself.
       </p>
     </div>
-    <img class="portrait" src="assets/photo.jpg" alt="Portrait of Yihang Jiao">
+    <div class="side">
+      <img class="portrait" src="assets/photo.jpg" alt="Portrait of Yihang Jiao">
+      <div class="links">
+        [<a href="https://github.com/yhj3">GitHub</a>]
+        [<a href="https://huggingface.co/yihangj3">HF</a>]<br>
+        [<a href="https://www.linkedin.com/in/yihang-jiao-587885221">LinkedIn</a>]
+        [<a href="assets/Yihang_Jiao_CV.pdf">CV</a>]<br>
+        yihangj3@illinois.edu
+      </div>
+    </div>
   </div>
 </header>
 
 <main>
 
 <section id="work">
-  <h2>Selected Work</h2>
-
-  <div class="entry">
-    <div class="line">
-      <h3><a href="projects/brats.html">Brain Tumor Segmentation on Multi-Modal MRI: U-Net vs. TransUNet</a></h3>
-      <span class="meta">2025</span>
-    </div>
-    <div class="venue">Independent project &middot; BraTS-style 2D pipeline, four MRI modalities</div>
-    <p>
-      A single training entrypoint for three model families (U-Net, configurable U-Net, ResNet50&nbsp;+&nbsp;ViT
-      TransUNet) under identical data and optimization settings, so architectural effects can be isolated.
-      TransUNet reached <strong>0.7575</strong> foreground Dice vs. <strong>0.7326</strong> for the tuned U-Net —
-      but the transformer's advantage was localized to the diffuse tumor subregion (0.7652 vs. 0.6800),
-      not to compact structures. Redesigning the objective alone recovered roughly <strong>+7 Dice points</strong>
-      on an unchanged architecture.
-    </p>
-    <div class="tags">
-      <a href="projects/brats.html">Details &amp; results table</a>
-      <a href="https://github.com/yhj3/brats-unet-vs-transunet">Code</a>
-      <span>PyTorch</span><span>Segmentation</span><span>Class imbalance</span>
-    </div>
-  </div>
-
-  <div class="entry">
-    <div class="line">
-      <h3><a href="projects/viberepair.html">VibeRepair+: Retrieval-Augmented Program Repair for Java and Python</a></h3>
-      <span class="meta">2026</span>
-    </div>
-    <div class="venue">CS Software Engineering for GenAI &middot; with Yingjia Gu and Shengyue Guo</div>
-    <p>
-      A pluggable retriever framework over a 97,402-example bug-fix corpus, plus a correction to how these
-      systems are evaluated. The incumbent leave-one-out protocol reports a perfect recall@1 for every
-      retriever — while those same retrievers agree on only 34.1% of top-1 results. Under an external-query
-      protocol on 521 Defects4J bugs, lexical BM25 beat the dense baseline by <strong>+27.8% relative
-      recall@10</strong>, inverting the usual dense-beats-lexical assumption.
-    </p>
-    <div class="tags">
-      <a href="projects/viberepair.html">Details &amp; evaluation design</a>
-      <a href="https://github.com/yhj3/Vibe_Repair_Plus">Code</a>
-      <span>Retrieval</span><span>LLM evaluation</span><span>BM25 / RRF</span>
-    </div>
-  </div>
-
-  <div class="entry">
-    <div class="line">
-      <h3><a href="projects/scilit-rag.html">LLM Reranking for Scientific Literature with Citation Context</a></h3>
-      <span class="meta">2024</span>
-    </div>
-    <div class="venue">CS 598 Text Mining &middot; co-author</div>
-    <p>
-      Reranking candidate papers through LLM-adjudicated pairwise comparisons, treating noisy LLM judgments
-      as a dueling-bandit problem: UCB elimination cuts 190 exhaustive comparisons at <span class="mono">K=20</span>
-      to roughly 44. Augmenting candidates with in-link citation context — from a corpus of 10,395 papers and
-      497,210 citation contexts — raised MRR from <strong>0.485 to 0.572</strong> at <span class="mono">K=5</span>.
-    </p>
-    <div class="tags">
-      <a href="projects/scilit-rag.html">Details</a>
-      <span>RAG</span><span>Dueling bandits</span><span>Scientific corpora</span>
-    </div>
-  </div>
+  <h2>Recent Work</h2>
+  <ul class="work">
+    <li>
+      <span class="title">Brain Tumor Segmentation on Multi-Modal MRI: U-Net vs. TransUNet</span><br>
+      <span class="who">Yihang Jiao.</span>
+      <span class="note"><em>Independent project, 2025.</em></span>
+      TransUNet reaches 0.7575 foreground Dice against 0.7326 for the tuned U-Net — but the gain is
+      localized to the diffuse tumor subregion (0.7652 vs. 0.6800), and redesigning the objective
+      alone recovers roughly +7 Dice points on an unchanged architecture.
+      <div class="brackets">
+        [<a href="projects/brats.html">write-up</a>]
+        [<a href="https://github.com/yhj3/brats-unet-vs-transunet">code</a>]
+        [<a href="https://huggingface.co/yihangj3/brats-transunet">weights</a>]
+      </div>
+    </li>
+    <li>
+      <span class="title">VibeRepair+: Retrieval-Augmented Program Repair for Java and Python</span><br>
+      <span class="who">Yihang Jiao, Yingjia Gu, Shengyue Guo.</span>
+      <span class="note"><em>CS Software Engineering for GenAI, 2026.</em></span>
+      The incumbent leave-one-out protocol scores every retriever at a perfect recall@1 while they
+      agree on only 34.1% of top-1 results. Under an external-query protocol on 521 Defects4J bugs,
+      lexical BM25 beats the dense baseline by 27.8% relative recall@10.
+      <div class="brackets">
+        [<a href="projects/viberepair.html">write-up</a>]
+        [<a href="https://github.com/yhj3/Vibe_Repair_Plus">code</a>]
+      </div>
+    </li>
+    <li>
+      <span class="title">LLM Reranking for Scientific Literature with Citation Context</span><br>
+      <span class="who">Yihang Jiao and co-authors.</span>
+      <span class="note"><em>CS 598 Text Mining, 2024.</em></span>
+      Treating noisy LLM pairwise judgments as a dueling-bandit problem cuts 190 exhaustive
+      comparisons to roughly 44; in-link citation context raises MRR from 0.485 to 0.572 at K=5.
+      <div class="brackets">
+        [<a href="projects/scilit-rag.html">write-up</a>]
+      </div>
+    </li>
+  </ul>
 </section>
 
-<section id="research-experience">
+<section id="experience">
   <h2>Research Experience</h2>
-  <div class="entry">
-    <div class="line">
-      <h3>FOCAL Lab, UIUC &mdash; Research Assistant</h3>
-      <span class="meta">Aug 2024 – Dec 2024</span>
-    </div>
-    <div class="venue">Robustness of neural language models &middot; advised by Prof. Gagandeep Singh</div>
-    <ul>
-      <li>
-        Built a hybrid adversarial-attack framework pairing LLaMA-2 counterfactual generation with a
-        three-stage semantic filter (label-flip rate &ge; 0.6, embedding cosine similarity &ge; 0.75,
-        GPT-2-XL perplexity &le; 150), probing classifier robustness beyond word-substitution attacks.
-      </li>
-      <li>
-        Filtering discarded 37.7% of generated candidates while retaining 91% of effective adversarial
-        examples, raising attack success from 68.2% to 85.1% on RoBERTa-Large and 71.4% to 79.8% on
-        BERT-Base over TextFooler and PWWS baselines.
-      </li>
-      <li>
-        Found susceptibility scales with model capacity, and that inference-style tasks (RTE, QNLI;
-        +11.3% average) gain more from generative rewriting than sentiment tasks, where lexical
-        substitution already suffices.
-      </li>
-    </ul>
-  </div>
+  <p>
+    <strong>Research Assistant</strong>, FOCAL Lab, UIUC — with Prof.
+    <a href="https://ggndpsngh.github.io/">Gagandeep Singh</a>, Aug–Dec 2024.
+  </p>
+  <p>
+    I built a hybrid adversarial-attack framework that pairs LLaMA-2 counterfactual generation with a
+    three-stage semantic filter (label-flip rate ≥ 0.6, embedding cosine similarity ≥ 0.75, GPT-2-XL
+    perplexity ≤ 150), to see how classifiers hold up against attacks that rewrite a sentence rather
+    than swap words in it. Filtering discarded 37.7% of generated candidates while keeping 91% of the
+    effective ones, raising attack success from 68.2% to 85.1% on RoBERTa-Large. What I found most
+    interesting is that inference-style tasks (RTE, QNLI; +11.3% on average) benefit far more from
+    generative rewriting than sentiment tasks do, where swapping a single word is already enough.
+  </p>
 </section>
 
 <section id="education">
   <h2>Education</h2>
   <div class="kv">
-    <div><strong>University of Illinois Urbana-Champaign</strong> &mdash; M.S. in Computer Science, GPA 3.91/4.0</div>
+    <div><strong>University of Illinois Urbana-Champaign</strong> — Master of Computer Science, GPA 3.91/4.0</div>
     <div class="r">Expected Dec 2027</div>
-    <div><strong>University of Illinois Urbana-Champaign</strong> &mdash; B.S. in Mathematics and Computer Science, GPA 3.83/4.0</div>
+    <div><strong>University of Illinois Urbana-Champaign</strong> — B.S. in Mathematics and Computer Science, GPA 3.83/4.0</div>
     <div class="r">May 2025</div>
   </div>
   <p class="meta" style="margin-top:12px">
-    Coursework: Deep Learning &middot; Machine Learning Theory &middot; Applied Machine Learning &middot;
-    Text Mining &middot; Software Engineering for GenAI &middot; Statistics and Probability &middot; Algorithms
+    Deep Learning · Machine Learning Theory · Applied Machine Learning · Text Mining ·
+    Software Engineering for GenAI · Statistics and Probability · Algorithms
   </p>
-</section>
-
-<section id="skills">
-  <h2>Skills</h2>
-  <p>
-    <strong>Machine learning.</strong> PyTorch, CUDA, HuggingFace Transformers, mixed-precision and multi-GPU
-    training, gradient accumulation, 4-bit quantization (BitsAndBytes), FAISS, scikit-learn, NumPy, pandas.
-  </p>
-  <p>
-    <strong>Biomedical &amp; scientific data.</strong> Multi-modal MRI volume handling and intensity
-    normalization, 2D/3D semantic segmentation, Dice-based evaluation under class imbalance, large-scale
-    scientific corpus construction.
-  </p>
-  <p><strong>Programming.</strong> Python, C++, C#, Java, Git, L<span style="letter-spacing:-.1em">A</span>T<sub>E</sub>X.</p>
 </section>
 
 <section id="contact">
   <h2>Contact</h2>
   <p>
-    Email is the fastest way to reach me: <a href="mailto:yihangj3@illinois.edu">yihangj3@illinois.edu</a>.
-    I am glad to talk about machine learning for biomedical data, and about how these systems are
-    evaluated.
+    <a href="mailto:yihangj3@illinois.edu">yihangj3@illinois.edu</a> is the fastest way to reach me.
+    I am always glad to talk about machine learning for biomedical data, and about how these systems
+    are evaluated — if you think one of the numbers on this site deserves a harder test, I would
+    genuinely like to hear it.
   </p>
 </section>
 
@@ -184,7 +148,8 @@
 </div>
 
 <footer><div class="wrap">
-  Last updated August 2026 &middot; Built as a static site, hosted on GitHub Pages.
+  Last updated August 2026 · Static site on GitHub Pages ·
+  <a href="https://github.com/yhj3/yhj3.github.io">source</a>
 </div></footer>
 
 </body>
