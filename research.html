@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Research — Yihang Jiao</title>
 <meta name="description" content="Projects, research experience, and directions: machine learning for biomedical data, robustness of language models, LLM agents, and how these systems are evaluated.">
-<link rel="stylesheet" href="assets/style.css?v=7">
+<link rel="stylesheet" href="assets/style.css?v=8">
 </head>
 <body>
 
@@ -35,11 +35,13 @@
       <span class="title">Brain Tumor Segmentation on Multi-Modal MRI: U-Net vs. TransUNet</span><br>
       <span class="who">Yihang Jiao.</span>
       <span class="note"><em>Independent project, 2025.</em></span>
-      I built one training pipeline in which a U-Net, a configurable U-Net, and a TransUNet can be
-      compared under identical data and training settings, so that a change in the score can be traced
-      to a single deliberate change. Using it, I found that how the loss and the sampler are designed
-      matters about as much as which backbone you choose, and that the transformer's advantage is
-      concentrated on one kind of tumor region rather than spread evenly.
+      This is where I first learned to handle biomedical data. I built one pipeline in which a U-Net,
+      a configurable U-Net, and a TransUNet train under identical data and training settings, so that
+      a change in the score can be traced to a single deliberate change. I expected a larger model to
+      perform better. Making the U-Net deeper hurt performance, while fixing only the loss function
+      improved it by roughly seven Dice points on an unchanged architecture. And even when the hybrid
+      ResNet-ViT reached the best overall score, the improvement came almost entirely from one diffuse
+      tumor subregion. This taught me not to trust a single averaged metric.
       <div class="brackets">
         Paper: <a href="assets/papers/brats-unet-vs-transunet.pdf">yhj3.github.io/assets/papers/brats-unet-vs-transunet.pdf</a><br>
         Write-up: <a href="projects/brats.html">yhj3.github.io/projects/brats.html</a><br>
@@ -52,11 +54,13 @@
       <span class="title">VibeRepair+: Retrieval-Augmented Program Repair for Java and Python</span><br>
       <span class="who">Yihang Jiao, Yingjia Gu, Shengyue Guo.</span>
       <span class="note"><em>CS Software Engineering for GenAI, 2026.</em></span>
-      I built a retriever framework for LLM program repair in which swapping in a new retrieval
-      strategy takes one file, and then found that the evaluation everyone was using could not tell
-      the retrievers apart — it was really asking whether a document can find itself, so every
-      retriever scored perfectly. I designed a replacement protocol on real bugs, under which the
-      ranking of the retrievers reverses and a simple lexical method beats the dense baseline.
+      My main contribution was the evaluation. At first we tested retrievers by asking them to find a
+      bug inside the same 97k database they were built from, and every retriever received a perfect
+      score of 1.000. I designed a simple check and found that this score was not meaningful:
+      different retrievers agreed on only 34.1% of their top results. To fix this I built a pluggable
+      retriever framework and a new external evaluation on 521 real, unseen bugs from Defects4J. Under
+      the fair test a simple lexical method outperformed the dense embedding by 27.8%. This taught me
+      that a benchmark can easily confirm itself if we do not question how it is built.
       <div class="brackets">
         Paper: <a href="assets/papers/viberepair-plus.pdf">yhj3.github.io/assets/papers/viberepair-plus.pdf</a><br>
         Write-up: <a href="projects/viberepair.html">yhj3.github.io/projects/viberepair.html</a><br>
@@ -65,40 +69,40 @@
     </li>
 
     <li>
-      <span class="title">LLM RAG Reranker with Pairwise Comparison and Citation Context</span><br>
-      <span class="who">Yexin Wu, Yihang Jiao.</span>
-      <span class="note"><em>CS 598 Text Mining, 2024.</em></span>
-      Search over papers ranks them by what they say about themselves. We reranked candidates by
-      letting a language model compare them two at a time, and made that affordable by treating its
-      noisy judgments as a bandit problem so most comparisons can be skipped. We also built a corpus
-      of citation contexts, so the reranker can see how a paper is actually used by others rather than
-      only how it describes itself.
-      <div class="brackets">
-        Paper: <a href="assets/papers/llm-rag-reranker.pdf">yhj3.github.io/assets/papers/llm-rag-reranker.pdf</a><br>
-        Write-up: <a href="projects/scilit-rag.html">yhj3.github.io/projects/scilit-rag.html</a>
-      </div>
-    </li>
-
-    <li>
       <span class="title">What LLM Rewriting Costs an Adversarial Attack</span><br>
       <span class="who">Yihang Jiao.</span>
       <span class="note"><em>Research assistant, FOCAL Lab, with Prof.
       <a href="https://ggndpsngh.github.io/">Gagandeep Singh</a>, 2024; revised 2026.</em></span>
-      Standard attacks on text classifiers swap words for synonyms; I had a language model rewrite
-      whole sentences instead. Rewriting makes the attacks far more fluent, but it also destroys more
-      than half of them — and how much it destroys turns out to be set by the prompt. The prompt that
-      best preserves the attack on topic classification does so by instructing the model to change the
-      topic, which produces a different input rather than an attack: a trap for any evaluation that
-      reports flip rate without a paired semantic constraint.
-      <span class="note">Revising this work meant auditing my own earlier version of it, in which the
-      classifier had never been run on the rewrites at all. The corrected study, the audit, and the
-      check that would have caught it are all in the paper.</span>
+      Standard attacks on text classifiers replace single words with synonyms. I tried having a
+      language model rewrite whole sentences instead, and the rewrites read far more naturally. When I
+      returned to this work a year later and ran the classifier on the rewrites, which the original
+      evaluation had never done, only 44.5% of the attacks survived. The prompt that preserved them
+      best turned out to work by instructing the model to change the topic, which produces a different
+      input rather than an attack. This taught me my most important lesson, and I learned it from my
+      own mistake: a number can look like evidence while measuring something else entirely.
       <div class="brackets">
         Paper (revised): <a href="assets/papers/counterfactual-textattack-revised.pdf">yhj3.github.io/assets/papers/counterfactual-textattack-revised.pdf</a><br>
         Paper (original 2024): <a href="assets/papers/counterfactual-textattack.pdf">yhj3.github.io/assets/papers/counterfactual-textattack.pdf</a><br>
         Code available: <a href="https://github.com/yhj3/counterfactual-textattack">https://github.com/yhj3/counterfactual-textattack</a>
       </div>
     </li>
+
+    <li>
+      <span class="title">LLM RAG Reranker with Pairwise Comparison and Citation Context</span><br>
+      <span class="who">Yexin Wu, Yihang Jiao.</span>
+      <span class="note"><em>CS 598 Text Mining, 2024.</em></span>
+      Search over papers ranks them by what they say about themselves, which is a poor guide to how
+      useful a paper actually is. We reranked candidates by letting a language model compare them two
+      at a time, and treated its noisy judgments as a bandit problem so that most comparisons could be
+      skipped. We also collected the citation contexts of each paper, so that the reranker could see
+      how a paper is used by others rather than only how it describes itself. This raised MRR from
+      0.485 to 0.572.
+      <div class="brackets">
+        Paper: <a href="assets/papers/llm-rag-reranker.pdf">yhj3.github.io/assets/papers/llm-rag-reranker.pdf</a><br>
+        Write-up: <a href="projects/scilit-rag.html">yhj3.github.io/projects/scilit-rag.html</a>
+      </div>
+    </li>
+
   </ul>
 </section>
 
@@ -106,20 +110,23 @@
   <h2>What I want to work on next</h2>
   <p>
     <span class="title">Evaluation protocols for machine learning on scientific data.</span>
-    Leave-one-out and random-split protocols are load-bearing in a lot of published results, and they
-    overstate performance whenever the query and the gold answer share provenance — the retrievers in
-    VibeRepair+ all scored a perfect recall@1 under a protocol that was really asking whether a
-    document can find itself. The same shape shows up wherever the split does not hold out the thing
-    the model is supposed to generalize over. What I would like to build is a checkable recipe rather
-    than a new model: an external-query construction, a two-stage leak check, and a random-retrieval
-    floor reported next to every headline number.
+    Leave-one-out and random splits are used to support many published results, and they overstate
+    performance whenever the query and the answer come from the same source. In VibeRepair+ every
+    retriever received a perfect score under a protocol that was really asking whether a document can
+    find itself. The same shape appears wherever the split does not hold out the thing the model is
+    supposed to generalize over. What I would like to build is a checkable recipe rather than a new
+    model: a way to construct external queries, a two-stage leak check, and a random-retrieval floor
+    reported next to every headline number. Biomedical data makes this sharper rather than softer,
+    because labels are scarce, positives are rare, and batch structure often correlates with
+    condition closely enough that a model can score well by reading the batch instead of the biology.
   </p>
   <p>
     <span class="title">Also interested in: perturbational cell-state modeling.</span>
-    Predicting how a cell moves from a baseline state to a new one under a perturbation, with readouts
-    that are heterogeneous — imaging, transcriptomics, perturbation metadata. I have not worked on this
-    and have not thought it through in detail; I note it as something I find interesting and would like
-    to learn. If you work on it, I would be glad to hear what I should be reading.
+    A protein's structure is mostly decided by its sequence, but a cell's state is decided by many
+    things together, such as gene expression, protein abundance, and spatial organization. We almost
+    never measure all of them in the same cell at the same time, so the modeling problem is also an
+    information problem. I have not worked on this and have not thought it through in detail; I note
+    it as an area I find interesting and would like to learn.
   </p>
 </section>
 
