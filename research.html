@@ -59,51 +59,43 @@
 </section>
 
 <section>
-  <h2>Directions I'm working toward</h2>
+  <h2>Directions I want to move toward</h2>
 
   <div class="entry">
     <h3>Multimodal perturbational cell-state modeling</h3>
-    <div class="venue">In-progress direction &middot; feedback very welcome</div>
+    <div class="venue">An interest, not yet a project</div>
     <p>
-      Virtual-cell modeling asks a prediction question I find compelling: given a cell in some baseline
-      state and a perturbation applied to it — a compound, a genetic knockout, a dose — what state does the
-      cell move to? The interesting version of the question is multimodal, because the readouts are
-      heterogeneous: high-content imaging, transcriptomic profiles, and perturbation metadata each capture
-      a different projection of the same underlying state transition, and none of them alone is the state.
+      I have not worked on this yet. I am describing it here because it is the direction I want my next
+      project to be in, and I would rather say that plainly than imply more than I have done.
     </p>
     <p>
-      Concretely, the pieces I want to work on:
+      The question: given a cell in some baseline state and a perturbation applied to it — a compound, a
+      genetic knockout, a dose — what state does it move to? What draws me to it is that the readouts are
+      heterogeneous. High-content imaging, transcriptomic profiles, and perturbation metadata each capture
+      a different projection of the same transition, and none of them alone is the state.
     </p>
+    <p>Two things I would want to understand before claiming anything about it:</p>
     <ul>
       <li>
-        <strong>A shared latent state across modalities.</strong> Learning a representation in which an
-        imaging readout and a transcriptomic readout of the same perturbed condition land in the same
-        place, so a perturbation can be modeled as an operator on that state rather than as a label
-        attached to one assay.
+        <strong>What the evaluation actually holds out.</strong> Whether reported performance survives
+        held-out compounds and held-out doses, rather than held-out wells — splitting over wells leaks the
+        perturbation identity.
       </li>
       <li>
-        <strong>Generalization to unseen perturbations, not just unseen cells.</strong> The hard split is
-        held-out compounds and held-out doses, not held-out wells. Random splits over wells leak the
-        perturbation identity, and reported performance under them mostly measures memorization — the same
-        failure mode I found in retrieval evaluation, in a different costume.
-      </li>
-      <li>
-        <strong>Evaluation that survives batch effects.</strong> Plate and batch structure correlates with
-        biological condition often enough that a model can score well by reading the batch. Protocols need
-        explicit batch-held-out splits and a null model that is given only the nuisance covariates.
+        <strong>How batch structure is separated from biological signal.</strong> Plate and batch correlate
+        with condition often enough that a model can score well by reading the batch instead of the biology.
       </li>
     </ul>
     <p>
-      My existing work is the tooling for this rather than a detour from it: multi-modal volumetric data
-      handling and imbalance-aware segmentation from BraTS, large-scale corpus construction and leak
-      detection from the retrieval projects, and the habit of building one entrypoint where every
-      configuration knob is recorded in the checkpoint.
+      Both are the same shape as the problem I ran into in retrieval evaluation, which is part of why the
+      area interests me. What I would bring to it is tooling rather than domain expertise: multi-modal
+      volumetric data handling and imbalance-aware segmentation from BraTS, and corpus construction with
+      leak checking from the retrieval projects. The biology I would have to learn.
     </p>
     <blockquote>
       <p>
-        This section describes work I am starting rather than results I have. If you work on virtual-cell
-        or perturbation-response modeling and think I have a piece of it wrong, I would genuinely like to
-        hear it — <a href="mailto:yihangj3@illinois.edu">yihangj3@illinois.edu</a>.
+        If you work on virtual-cell or perturbation-response modeling and think I have some of this wrong,
+        I would like to hear it — <a href="mailto:yihangj3@illinois.edu">yihangj3@illinois.edu</a>.
       </p>
     </blockquote>
   </div>

@@ -34,11 +34,11 @@
         imbalance, limited supervision, and distribution shift.
       </p>
       <p>
-        A theme runs through my projects: <em>most reported gains are not where people think they are</em>.
-        On BraTS, redesigning the loss and sampler recovered as much Dice as swapping the backbone. In
-        retrieval-augmented program repair, the standard evaluation protocol turned out to be measuring a
-        self-match artifact rather than retrieval quality. I like building pipelines where a number can be
-        traced back to the one knob that produced it.
+        In both of my recent projects, a large part of the result came from measurement details. On BraTS,
+        redesigning the loss and sampler changed foreground Dice by about as much as changing the backbone
+        did. In retrieval-augmented program repair, the standard leave-one-out protocol gave every retriever
+        a perfect recall@1, while those same retrievers agreed on only 34.1% of their top-1 results. I try to
+        build pipelines where a reported number can be traced back to the specific setting that produced it.
       </p>
       <p class="meta">
         <a href="mailto:yihangj3@illinois.edu">yihangj3@illinois.edu</a> &middot;
@@ -173,8 +173,8 @@
   <h2>Contact</h2>
   <p>
     Email is the fastest way to reach me: <a href="mailto:yihangj3@illinois.edu">yihangj3@illinois.edu</a>.
-    I am always glad to talk about machine learning for biomedical data — and especially about evaluation
-    protocols that quietly flatter the method being tested.
+    I am glad to talk about machine learning for biomedical data, and about how these systems are
+    evaluated.
   </p>
 </section>
 
