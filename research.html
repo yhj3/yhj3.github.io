@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Research — Yihang Jiao</title>
 <meta name="description" content="Projects, research experience, and directions: machine learning for biomedical data, robustness of language models, LLM agents, and how these systems are evaluated.">
-<link rel="stylesheet" href="assets/style.css?v=6">
+<link rel="stylesheet" href="assets/style.css?v=7">
 </head>
 <body>
 
@@ -80,21 +80,25 @@
     </li>
 
     <li>
-      <span class="title">Using Counterfactuals to Attack Text Classifiers</span><br>
+      <span class="title">What LLM Rewriting Costs an Adversarial Attack</span><br>
       <span class="who">Yihang Jiao.</span>
       <span class="note"><em>Research assistant, FOCAL Lab, with Prof.
-      <a href="https://ggndpsngh.github.io/">Gagandeep Singh</a>, 2024.</em></span>
-      Standard attacks on text classifiers swap individual words for synonyms. I had a language model
-      rewrite whole sentences instead, and added a filter that keeps only rewrites that still mean what
-      the original meant — which is what makes a generated attack count as evidence rather than noise.
-      The rewriting helps most on tasks that require reasoning across sentences, and larger models turn
-      out to be the more vulnerable ones.
+      <a href="https://ggndpsngh.github.io/">Gagandeep Singh</a>, 2024; revised 2026.</em></span>
+      Standard attacks on text classifiers swap words for synonyms; I had a language model rewrite
+      whole sentences instead. Rewriting makes the attacks far more fluent, but it also destroys more
+      than half of them — and how much it destroys turns out to be set by the prompt. The prompt that
+      best preserves the attack on topic classification does so by instructing the model to change the
+      topic, which produces a different input rather than an attack: a trap for any evaluation that
+      reports flip rate without a paired semantic constraint.
+      <span class="note">Revising this work meant auditing my own earlier version of it, in which the
+      classifier had never been run on the rewrites at all. The corrected study, the audit, and the
+      check that would have caught it are all in the paper.</span>
       <div class="brackets">
-        Paper: <a href="assets/papers/counterfactual-textattack.pdf">yhj3.github.io/assets/papers/counterfactual-textattack.pdf</a><br>
+        Paper (revised): <a href="assets/papers/counterfactual-textattack-revised.pdf">yhj3.github.io/assets/papers/counterfactual-textattack-revised.pdf</a><br>
+        Paper (original 2024): <a href="assets/papers/counterfactual-textattack.pdf">yhj3.github.io/assets/papers/counterfactual-textattack.pdf</a><br>
         Code available: <a href="https://github.com/yhj3/counterfactual-textattack">https://github.com/yhj3/counterfactual-textattack</a>
       </div>
     </li>
-
   </ul>
 </section>
 

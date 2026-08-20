@@ -1,0 +1,113 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[margin=0.45in]{geometry}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage[hidelinks]{hyperref}
+\usepackage{times}
+\usepackage{microtype}
+\usepackage{setspace}
+\setstretch{0.96}
+
+\pagestyle{empty}
+\setlist[itemize]{leftmargin=1.1em, topsep=0pt, itemsep=0pt, parsep=0pt}
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\vspace{-0.6em}\rule{\textwidth}{0.4pt}]
+\titlespacing{\section}{0pt}{5pt}{2pt}
+
+\newcommand{\entry}[3]{\noindent\textbf{#1}\hfill #2\\ \textit{#3}\vspace{1pt}}
+\newcommand{\code}[1]{\small Code: \url{#1}}
+
+\begin{document}
+
+\begin{center}
+{\LARGE \textbf{Yihang Jiao}}\\[3pt]
+\href{mailto:yihangj3@illinois.edu}{yihangj3@illinois.edu} $|$ 217-926-4101 $|$
+\href{https://yhj3.github.io}{yhj3.github.io} $|$
+\href{https://github.com/yhj3}{github.com/yhj3} $|$
+\href{https://www.linkedin.com/in/yihang-jiao-587885221}{linkedin.com/in/yihang-jiao-587885221}
+\end{center}
+
+\section*{Research Interests}
+Machine learning for biomedical data: medical image segmentation, biomedical and scientific
+literature retrieval, and reliable evaluation of deep models under class imbalance and limited supervision.
+
+\section*{Education}
+\entry{University of Illinois Urbana-Champaign}{Expected Dec 2027}{Master of Computer Science --- GPA 3.91/4.0}
+\entry{University of Illinois Urbana-Champaign}{May 2025}{B.S. in Mathematics and Computer Science --- GPA 3.83/4.0}
+
+\section*{Research Experience}
+
+\entry{FOCAL Lab, UIUC --- Prof. Gagandeep Singh}{Aug 2024 -- Dec 2024}{Research Assistant --- Robustness of Neural Language Models}
+\begin{itemize}
+\item Built a pipeline that attacks text classifiers by having LLaMA-2 rewrite whole sentences rather
+      than swapping words as TextFooler and PWWS do, then measured what the rewriting costs: across 32
+      model--attack--dataset configurations, rewrites of already-successful attacks still fool the
+      classifier only 44.5\% of the time, buying fluency (median GPT-2-XL perplexity 22.9 vs.\ 522)
+      at the price of more than half the attacks.
+\item Isolated the cause with a controlled ablation running a task-specific and a generic rewriting
+      prompt on identical data: the task-specific prompt roughly doubles the attacks that survive
+      (119/180 vs.\ 58/180, $p = 1.7 \times 10^{-10}$), and on sentiment tasks does so at no cost in
+      semantic similarity.
+\item Identified a trap in this class of method: on topic classification the best-performing prompt
+      raises the flip rate by instructing the model to change the topic, producing a different input
+      rather than an adversarial example --- which any flip-rate-only evaluation will reward.
+\item Audited and corrected my own earlier version of this study, in which the classifier had never
+      been run on the rewrites; the revised paper documents the error and the check that catches it.
+\end{itemize}
+\code{https://github.com/yhj3/counterfactual-textattack}
+
+\section*{Projects}
+
+\entry{Brain Tumor Segmentation on Multi-Modal MRI: U-Net vs. TransUNet}{Aug 2025 -- Dec 2025}{Independent project}
+\begin{itemize}
+\item Built a unified 2D segmentation pipeline over four co-registered MRI modalities (FLAIR, T1,
+      T1-CE, T2) in which a U-Net baseline, a configurable U-Net, and a ResNet50 + ViT TransUNet train
+      through one entrypoint, so architectural effects separate from preprocessing and loss design.
+      The data path is end to end: brain-region cropping from non-zero tissue, slice indexing that
+      discards empty slices and flags tumor presence, per-slice z-score normalization, and foreground
+      oversampling against severe class imbalance.
+\item Found that redesigning the objective alone --- present-class foreground Dice with warmup, class
+      weighting, foreground oversampling --- recovered roughly +7 Dice points on an unchanged
+      architecture, showing loss and sampling design matter about as much as backbone choice.
+\item Reached 0.7575 foreground Dice with TransUNet against 0.7326 for the tuned U-Net under a fixed
+      15-epoch budget; class-wise analysis localized the transformer's advantage to the diffuse tumor
+      subregion (0.7652 vs.\ 0.6800) rather than to compact structures.
+\end{itemize}
+\code{https://github.com/yhj3/brats-unet-vs-transunet} \\
+{\small Weights: \url{https://huggingface.co/yihangj3/brats-transunet}}
+
+\entry{VibeRepair+: Retrieval-Augmented Program Repair for Java and Python}{Jan 2026 -- May 2026}{CS Software Engineering for GenAI --- co-author}
+\begin{itemize}
+\item Designed a pluggable retriever framework over a 97,402-example bug-fix corpus in which adding a
+      retrieval strategy takes one Python file and no changes to the serving endpoint, evaluation
+      harness, or metrics; reproducibility enforced by a corpus SHA-256 fingerprint and a locked
+      holdout split.
+\item Diagnosed the incumbent leave-one-out evaluation as a self-match artifact --- every retriever
+      scored a perfect recall@1 while agreeing on only 34.1\% of top-1 results --- and replaced it
+      with an external-query protocol on 521 real Defects4J bugs, with an operator-aware token-overlap
+      proxy ground truth and a two-stage embedding plus edit-distance leak check.
+\item Under the corrected protocol, lexical BM25 beat the dense-embedding baseline by 27.8\% relative
+      recall@10, inverting the usual dense-beats-lexical assumption; a Reciprocal Rank Fusion hybrid
+      led five of six metrics and recovered 15 top-10 hits missed by both sub-retrievers.
+\end{itemize}
+\code{https://github.com/yhj3/Vibe_Repair_Plus}
+
+\entry{LLM RAG Reranker for Scientific Literature with Citation Context}{Aug 2024 -- Dec 2024}{CS 598 Text Mining --- co-author}
+\begin{itemize}
+\item Built a literature retrieval system that reranks candidate papers through LLM-adjudicated
+      pairwise comparisons, treating the noisy judgments as a dueling-bandit problem and applying UCB
+      Elimination to cut roughly 190 exhaustive comparisons at $K=20$ down to about 44.
+\item Curated a corpus of 10,395 papers and 497,210 citation contexts by breadth-first traversal of
+      LaTeX sources; augmenting candidates with in-link citation context --- how a paper is used by
+      others, rather than how it describes itself --- raised MRR from 0.485 to 0.572 at $K=5$.
+\end{itemize}
+{\small Write-up: \url{https://yhj3.github.io/projects/scilit-rag.html}}
+
+\section*{Skills}
+{\small\noindent
+\textbf{ML:} PyTorch, CUDA, HuggingFace Transformers, mixed-precision and multi-GPU training, 4-bit
+quantization, FAISS, scikit-learn, NumPy, pandas.
+\textbf{Biomedical/scientific data:} multi-modal MRI handling and normalization, 2D/3D segmentation,
+Dice evaluation under class imbalance, large-scale corpus construction.
+\textbf{Programming:} Python, C++, C\#, Java, Git, \LaTeX.}
+
+\end{document}
