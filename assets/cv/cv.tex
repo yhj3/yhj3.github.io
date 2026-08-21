@@ -6,7 +6,7 @@
 \usepackage{times}
 \usepackage{microtype}
 \usepackage{setspace}
-\setstretch{0.96}
+\setstretch{0.94}
 
 \pagestyle{empty}
 \setlist[itemize]{leftmargin=1.1em, topsep=0pt, itemsep=0pt, parsep=0pt}
@@ -38,23 +38,24 @@ literature retrieval, and reliable evaluation of deep models under class imbalan
 
 \entry{FOCAL Lab, UIUC --- Prof. Gagandeep Singh}{Aug 2024 -- Dec 2024}{Research Assistant --- Reliability of Automated Red-Teaming}
 \begin{itemize}
-\item Built a pipeline that probes text classifiers by having LLaMA-2 rewrite whole sentences rather
-      than swapping words as TextFooler and PWWS do, then asked what such a pipeline is measuring:
-      across 32 configurations, rewrites of already-successful attacks still fool the classifier only
-      44.5\% of the time, buying fluency (median perplexity 22.9 vs.\ 522) at the price of more than
-      half the attacks.
-\item Identified and quantified three ways a generated probe is counted without being a valid test.
-      \textbf{Label validity}: a prompt ablation on identical data (119/180 vs.\ 58/180,
-      $p = 1.7\times10^{-10}$) showed the best-performing prompt wins by instructing the model to
-      change the label, so reporting flip rate alone overstates attack success by $3.05\times$
-      overall and $19.5\times$ on topic classification.
-\item \textbf{Input validity}: on sentence-pair tasks most probes collapse the two segments and are
-      not well-formed inputs; because malformed probes are scored as failures, leaving them in
-      understates attack success (12.5\% vs.\ 41.7\%), so the two errors push in opposite directions
+\item Probed text classifiers by having LLaMA-2 rewrite whole sentences rather than swapping words,
+      then asked what such a pipeline measures: across 32 configurations, rewrites of
+      already-successful attacks still fool the classifier only 44.5\% of the time, buying fluency
+      (median perplexity 22.9 vs.\ 522) at the price of half the attacks.
+\item \textbf{Label validity.} A prompt ablation on identical data (119/180 vs.\ 58/180,
+      $p=1.7\times10^{-10}$) showed the winning prompt wins by instructing the model to change the
+      label: an independently trained referee reproduces 86--87\% of those ``successes'', and
+      requiring the flip to be target-specific \textbf{reverses the ranking}, 12/180 against 25/180.
+      The cosine-similarity constraint standard in this literature catches this on topic
+      classification and misses 56\% of it on sentiment.
+\item \textbf{Input validity.} On sentence-pair tasks most probes collapse the two segments and are
+      not well-formed inputs; since malformed probes are scored as failures, leaving them in
+      \emph{understates} attack success (12.5\% vs.\ 41.7\%) --- the two errors run opposite ways
       and do not cancel.
-\item \textbf{Measurement validity}: audited my own earlier version of this study, in which the
-      classifier had never been run on the generated text, and derived the one-line check that
-      catches it; the paper closes with three numbers any red-teaming report should carry.
+\item \textbf{Generator and measurement validity.} The generating model refuses 6.2\% of requests at
+      a rate tracking the prompt under study, and its refusals are scored as attacks; my own earlier
+      version of this study never ran the classifier on the generated text at all. Closes with five
+      numbers any red-teaming report should carry.
 \end{itemize}
 \code{https://github.com/yhj3/counterfactual-textattack}
 
