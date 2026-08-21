@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Research — Yihang Jiao</title>
 <meta name="description" content="Projects, research experience, and directions: machine learning for biomedical data, robustness of language models, LLM agents, and how these systems are evaluated.">
-<link rel="stylesheet" href="assets/style.css?v=10">
+<link rel="stylesheet" href="assets/style.css?v=11">
 </head>
 <body>
 
@@ -70,18 +70,19 @@
     </li>
 
     <li>
-      <span class="title">What LLM Rewriting Costs an Adversarial Attack</span><br>
+      <span class="title">When the Attack Is Not an Attack: Validity Failures in LLM-Generated Red-Teaming</span><br>
       <span class="who">Yihang Jiao.</span>
       <span class="note"><em>Research assistant, FOCAL Lab, with Prof.
       <a href="https://ggndpsngh.github.io/">Gagandeep Singh</a>, 2024; revised 2026.</em></span>
-      Standard attacks on text classifiers replace single words with synonyms. I had LLaMA-2 rewrite
-      whole sentences instead, over 8 datasets and 2 victim models. A year later I ran the classifier
-      on the rewrites, which the first version of this work had not done, and only 44.5% of the
-      attacks still worked. The rewrites are much easier to read (median perplexity 22.9 against 522),
-      so the method trades attack strength for fluency. I then ran a task-specific and a generic
-      prompt on the same data: the task-specific one keeps about twice as many attacks (119 of 180
-      against 58 of 180). On topic classification it does this by telling the model to change the
-      topic, which gives a different input rather than an attack.
+      Automated red-teaming uses one language model to generate the probes that test another, but a
+      probe only says something about the target if it is a valid test of the target. I measured three
+      ways it fails to be. A rewriting prompt can raise the flip rate by changing the input's true
+      label, which overstates attack success by 3.05x overall and 19.5x on topic classification. A
+      probe can fail to be a well-formed input at all, which understates it, 12.5% against 41.7% on
+      sentence-pair tasks — so the two errors push in opposite directions and do not cancel. And a
+      pipeline can report a number computed from something other than what it generated, which is
+      invisible in the outputs. Underneath all three, rewriting keeps only 44.5% of the attacks it is
+      applied to while making them much more fluent (median perplexity 22.9 against 522).
       <div class="brackets">
         Paper (revised): <a href="assets/papers/counterfactual-textattack-revised.pdf">yhj3.github.io/assets/papers/counterfactual-textattack-revised.pdf</a><br>
         Paper (original 2024): <a href="assets/papers/counterfactual-textattack.pdf">yhj3.github.io/assets/papers/counterfactual-textattack.pdf</a><br>
