@@ -36,22 +36,25 @@ literature retrieval, and reliable evaluation of deep models under class imbalan
 
 \section*{Research Experience}
 
-\entry{FOCAL Lab, UIUC --- Prof. Gagandeep Singh}{Aug 2024 -- Dec 2024}{Research Assistant --- Robustness of Neural Language Models}
+\entry{FOCAL Lab, UIUC --- Prof. Gagandeep Singh}{Aug 2024 -- Dec 2024}{Research Assistant --- Reliability of Automated Red-Teaming}
 \begin{itemize}
-\item Built a pipeline that attacks text classifiers by having LLaMA-2 rewrite whole sentences rather
-      than swapping words as TextFooler and PWWS do, then measured what the rewriting costs: across 32
-      model--attack--dataset configurations, rewrites of already-successful attacks still fool the
-      classifier only 44.5\% of the time, buying fluency (median GPT-2-XL perplexity 22.9 vs.\ 522)
-      at the price of more than half the attacks.
-\item Isolated the cause with a controlled ablation running a task-specific and a generic rewriting
-      prompt on identical data: the task-specific prompt roughly doubles the attacks that survive
-      (119/180 vs.\ 58/180, $p = 1.7 \times 10^{-10}$), and on sentiment tasks does so at no cost in
-      semantic similarity.
-\item Identified a trap in this class of method: on topic classification the best-performing prompt
-      raises the flip rate by instructing the model to change the topic, producing a different input
-      rather than an adversarial example --- which any flip-rate-only evaluation will reward.
-\item Audited and corrected my own earlier version of this study, in which the classifier had never
-      been run on the rewrites; the revised paper documents the error and the check that catches it.
+\item Built a pipeline that probes text classifiers by having LLaMA-2 rewrite whole sentences rather
+      than swapping words as TextFooler and PWWS do, then asked what such a pipeline is measuring:
+      across 32 configurations, rewrites of already-successful attacks still fool the classifier only
+      44.5\% of the time, buying fluency (median perplexity 22.9 vs.\ 522) at the price of more than
+      half the attacks.
+\item Identified and quantified three ways a generated probe is counted without being a valid test.
+      \textbf{Label validity}: a prompt ablation on identical data (119/180 vs.\ 58/180,
+      $p = 1.7\times10^{-10}$) showed the best-performing prompt wins by instructing the model to
+      change the label, so reporting flip rate alone overstates attack success by $3.05\times$
+      overall and $19.5\times$ on topic classification.
+\item \textbf{Input validity}: on sentence-pair tasks most probes collapse the two segments and are
+      not well-formed inputs; because malformed probes are scored as failures, leaving them in
+      understates attack success (12.5\% vs.\ 41.7\%), so the two errors push in opposite directions
+      and do not cancel.
+\item \textbf{Measurement validity}: audited my own earlier version of this study, in which the
+      classifier had never been run on the generated text, and derived the one-line check that
+      catches it; the paper closes with three numbers any red-teaming report should carry.
 \end{itemize}
 \code{https://github.com/yhj3/counterfactual-textattack}
 
