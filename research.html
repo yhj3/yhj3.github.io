@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Research — Yihang Jiao</title>
 <meta name="description" content="Projects, research experience, and directions: machine learning for biomedical data, robustness of language models, LLM agents, and how these systems are evaluated.">
-<link rel="stylesheet" href="assets/style.css?v=12">
+<link rel="stylesheet" href="assets/style.css?v=13">
 </head>
 <body>
 
@@ -75,14 +75,16 @@
       <span class="note"><em>Research assistant, FOCAL Lab, with Prof.
       <a href="https://ggndpsngh.github.io/">Gagandeep Singh</a>, 2024; revised 2026.</em></span>
       Automated red-teaming uses one language model to generate the probes that test another, but a
-      probe only says something about the target if it is a valid test of the target. I measured three
+      probe only says something about the target if it is a valid test of the target. I measured four
       ways it fails to be. A rewriting prompt can raise the flip rate by changing the input's true
       label, which overstates attack success by 3.05x overall and 19.5x on topic classification. A
       probe can fail to be a well-formed input at all, which understates it, 12.5% against 41.7% on
-      sentence-pair tasks — so the two errors push in opposite directions and do not cancel. And a
-      pipeline can report a number computed from something other than what it generated, which is
-      invisible in the outputs. Underneath all three, rewriting keeps only 44.5% of the attacks it is
-      applied to while making them much more fluent (median perplexity 22.9 against 522).
+      sentence-pair tasks — so the two errors push in opposite directions and do not cancel. The
+      generating model itself refuses 6.2% of the time, at a rate that tracks the prompt under study,
+      and those refusals get scored as attacks. And a pipeline can report a number computed from
+      something other than what it generated, which is invisible in the outputs. Underneath all four,
+      rewriting keeps only 44.5% of the attacks it is applied to while making them much more fluent
+      (median perplexity 22.9 against 522).
       <div class="brackets">
         Paper (revised): <a href="assets/papers/counterfactual-textattack-revised.pdf">yhj3.github.io/assets/papers/counterfactual-textattack-revised.pdf</a><br>
         Paper (original 2024): <a href="assets/papers/counterfactual-textattack.pdf">yhj3.github.io/assets/papers/counterfactual-textattack.pdf</a><br>
