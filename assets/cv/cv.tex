@@ -86,8 +86,8 @@ evaluation of deep models under class imbalance and limited supervision.
       weighting, foreground oversampling --- recovered roughly +7 Dice points on an unchanged
       architecture, showing loss and sampling design matter about as much as backbone choice.
 \item Reached 0.7575 foreground Dice with TransUNet against 0.7326 for the tuned U-Net under a fixed
-      15-epoch budget; class-wise analysis localized the transformer's advantage to the diffuse tumor
-      subregion (0.7652 vs.\ 0.6800) rather than to compact structures.
+      15-epoch budget (best-epoch validation); class-wise analysis localized the transformer's
+      advantage to the diffuse tumor subregion (0.7652 vs.\ 0.6800) rather than to compact structures.
 \end{itemize}
 \code{https://github.com/yhj3/brats-unet-vs-transunet} \\
 {\small Weights: \url{https://huggingface.co/yihangj3/brats-transunet}}
