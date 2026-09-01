@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Research — Yihang Jiao</title>
 <meta name="description" content="Projects, research experience, and directions: machine learning for biomedical data, robustness of language models, LLM agents, and how these systems are evaluated.">
-<link rel="stylesheet" href="assets/style.css?v=16">
+<link rel="stylesheet" href="assets/style.css?v=17">
 </head>
 <body>
 
@@ -93,31 +93,21 @@
     </li>
 
     <li>
-      <span class="title">LLM RAG Reranker with Pairwise Comparison and Citation Context</span><br>
-      <span class="who">Yexin Wu, Yihang Jiao.</span>
-      <span class="note"><em>Text mining, registered as CS 397, Prof. Jiawei Han’s section, 2024.</em></span>
-      Search over papers ranks them by their own title and abstract. We reranked the candidates by
-      asking a language model to compare them two at a time, and treated the noisy comparisons as a
-      bandit problem so that most pairs could be skipped, from about 190 down to 44. We also collected
-      10,395 papers and 497,210 citation contexts, so the reranker could see how a paper is used by
-      others. This raised MRR from 0.485 to 0.572.
+      <span class="title">Method-Specific Paper Recommendation for Academic Writing</span><br>
+      <span class="who">Yihang Jiao, with Prof. Hongying Zan (Zhengzhou University); course paper with Yexin Wu.</span>
+      <span class="note"><em>Aug 2024 – present; registered at UIUC as CS 397, Prof. Jiawei Han's section. Manuscript in preparation.</em></span>
+      Paper search usually reads only titles and abstracts, which is a poor guide when a researcher
+      needs a method rather than a topic. I extended SPECTER embeddings to subsection titles and
+      method descriptions, aligned them with sentence-level citation contexts, and built citation
+      graphs over direct and multi-level links; method-specific accuracy rose from 47% to 65% over
+      the baseline, judged by student raters using the system in their own research. With Yexin Wu,
+      I added an LLM reranking stage that compares candidates pairwise and treats the noisy
+      judgments as a bandit problem, cutting roughly 190 comparisons to 44; in-link citation
+      context — how a paper is used by others — raised MRR from 0.485 to 0.572.
       <div class="brackets">
         Paper: <a href="assets/papers/llm-rag-reranker.pdf">yhj3.github.io/assets/papers/llm-rag-reranker.pdf</a><br>
         Write-up: <a href="projects/scilit-rag.html">yhj3.github.io/projects/scilit-rag.html</a>
       </div>
-    </li>
-
-
-    <li>
-      <span class="title">Method-Specific Paper Recommendation for Academic Writing</span><br>
-      <span class="who">Yihang Jiao, with Prof. Hongying Zan (Zhengzhou University).</span>
-      <span class="note"><em>Ongoing collaboration, Aug 2024 – present. Manuscript in preparation.</em></span>
-      Paper search usually reads only titles and abstracts, which is a poor guide when a researcher
-      needs a method rather than a topic. I extended SPECTER embeddings to subsection titles and
-      method descriptions, aligned them with sentence-level citation contexts, and built citation
-      graphs over direct and multi-level links to refine the ranking. Accuracy on method-specific
-      recommendation rose from 47% to 65% over the baseline, judged by student raters who used the
-      system in their own research.
     </li>
 
   </ul>

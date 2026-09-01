@@ -59,14 +59,18 @@ evaluation of deep models under class imbalance and limited supervision.
 \end{itemize}
 \code{https://github.com/yhj3/counterfactual-textattack}
 
-\entry{Research Collaboration --- Prof. Hongying Zan, Zhengzhou University}{Aug 2024 -- present}{Method-specific paper recommendation for academic writing --- manuscript in preparation}
+\entry{Method-Specific Paper Recommendation for Academic Writing}{Aug 2024 -- present}{With Prof. Hongying Zan (Zhengzhou University); registered at UIUC as CS 397, Prof. Jiawei Han's section --- manuscript in preparation}
 \begin{itemize}
 \item Extended SPECTER embeddings beyond titles and abstracts to subsection titles and method
-      descriptions, aligned them with sentence-level citation contexts, and built citation graphs
-      over direct and multi-level links to refine the ranking.
-\item Method-specific recommendation accuracy rose from 47\% to 65\% over the baseline, judged by
-      student raters using the system in their own research.
+      descriptions, aligned them with sentence-level citation contexts, and built citation graphs over
+      direct and multi-level links; method-specific accuracy rose from 47\% to 65\% over the
+      baseline, judged by student raters using the system in their own research.
+\item With Yexin Wu, added an LLM reranking stage that compares candidates pairwise, treating the
+      noisy judgments as a dueling-bandit problem (UCB Elimination, roughly 190 comparisons cut to
+      44); over 10,395 papers and 497,210 citation contexts, in-link context raised MRR from 0.485
+      to 0.572 at $K=5$.
 \end{itemize}
+{\small Write-up: \url{https://yhj3.github.io/projects/scilit-rag.html}}
 
 \section*{Projects}
 
@@ -103,16 +107,6 @@ evaluation of deep models under class imbalance and limited supervision.
       led five of six metrics and recovered 15 top-10 hits missed by both sub-retrievers.
 \end{itemize}
 \code{https://github.com/yhj3/Vibe_Repair_Plus}
-
-\entry{LLM RAG Reranker for Scientific Literature with Citation Context}{Aug 2024 -- Dec 2024}{Text mining, registered as CS 397, Prof. Jiawei Han's section --- co-author}
-\begin{itemize}
-\item Built a literature retrieval system that reranks candidate papers through LLM-adjudicated
-      pairwise comparisons, treating the noisy judgments as a dueling-bandit problem and applying UCB
-      Elimination to cut roughly 190 exhaustive comparisons at $K=20$ down to about 44.
-\item Curated 10,395 papers and 497,210 citation contexts from LaTeX sources; augmenting candidates
-      with in-link context --- how a paper is used by others --- raised MRR from 0.485 to 0.572 at $K=5$.
-\end{itemize}
-{\small Write-up: \url{https://yhj3.github.io/projects/scilit-rag.html}}
 
 \section*{Skills}
 {\small\noindent
