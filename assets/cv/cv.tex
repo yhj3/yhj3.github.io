@@ -77,17 +77,20 @@ evaluation of deep models under class imbalance and limited supervision.
 \entry{Brain Tumor Segmentation on Multi-Modal MRI: U-Net vs. TransUNet}{Aug 2025 -- Dec 2025}{Independent project}
 \begin{itemize}
 \item Built a unified 2D segmentation pipeline over four co-registered MRI modalities (FLAIR, T1,
-      T1-CE, T2) in which a U-Net baseline, a configurable U-Net, and a ResNet50 + ViT TransUNet train
-      through one entrypoint, so architectural effects separate from preprocessing and loss design.
-      The data path is end to end: brain-region cropping from non-zero tissue, slice indexing that
-      discards empty slices and flags tumor presence, per-slice z-score normalization, and foreground
-      oversampling against severe class imbalance.
-\item Found that redesigning the objective alone --- present-class foreground Dice with warmup, class
-      weighting, foreground oversampling --- recovered roughly +7 Dice points on an unchanged
-      architecture, showing loss and sampling design matter about as much as backbone choice.
-\item Reached 0.7575 foreground Dice with TransUNet against 0.7326 for the tuned U-Net under a fixed
-      15-epoch budget (best-epoch validation); class-wise analysis localized the transformer's
-      advantage to the diffuse tumor subregion (0.7652 vs.\ 0.6800) rather than to compact structures.
+      T1-CE, T2): a U-Net, a configurable U-Net, and a ResNet50 + ViT TransUNet train through one
+      entrypoint under the same data path, split rule, and metric, and every checkpoint stores its full
+      configuration and crop box so the model can be rebuilt exactly. Data path: brain-region cropping,
+      empty-slice filtering, per-slice z-score normalization, foreground oversampling; objective:
+      class-weighted cross-entropy plus present-class foreground Dice with warmup.
+\item Found that deepening the U-Net and switching normalization with the loss untouched dropped
+      foreground Dice from 0.7326 to 0.6323; reworking only the objective and sampler on the same
+      architecture recovered about +7 points (0.7033), so loss and sampling design mattered as much as
+      backbone choice.
+\item TransUNet reached 0.7575 foreground Dice against 0.7326 for the U-Net under a fixed 15-epoch
+      from-scratch budget (best-epoch validation), with the gain localized to the diffuse subregion
+      (0.7652 vs.\ 0.6800) and none on compact structures; a variant adding skip-connection
+      self-attention, stronger augmentation, and $224^2$ input lowered cross-entropy (0.0455 to 0.0411)
+      but also Dice (0.7347).
 \end{itemize}
 \code{https://github.com/yhj3/brats-unet-vs-transunet} \\
 {\small Weights: \url{https://huggingface.co/yihangj3/brats-transunet}}

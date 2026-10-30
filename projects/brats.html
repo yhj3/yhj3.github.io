@@ -24,6 +24,7 @@
   <h1>Brain Tumor Segmentation on Multi-Modal MRI</h1>
   <p class="tagline">U-Net vs. TransUNet under fixed data and training settings &middot; Aug – Dec 2025</p>
   <div class="tags" style="margin-top:14px">
+    <a href="../assets/papers/brats-unet-vs-transunet.pdf">Paper</a>
     <a href="https://github.com/yhj3/brats-unet-vs-transunet">Code</a>
     <a href="https://huggingface.co/yihangj3/brats-transunet">Weights</a>
   </div>
@@ -136,10 +137,12 @@
   <div class="entry">
     <h3>3. Better calibration can cost Dice</h3>
     <p>
-      My decoder-side skip refinement with stronger augmentation improved mean cross-entropy
-      (0.0455 &rarr; 0.0411) while <em>lowering</em> FG Dice (0.7575 &rarr; 0.7347). The modified model is
-      better calibrated on average but more conservative on small lesions — which is exactly what hurts on
-      rare classes. Two reasonable metrics, opposite verdicts.
+      The last row changes three things at once: a lightweight self-attention block on one skip
+      connection, stronger augmentation, and a 224&sup2; input instead of 320&sup2;. Together they improved
+      mean cross-entropy (0.0455 &rarr; 0.0411) while <em>lowering</em> FG Dice (0.7575 &rarr; 0.7347).
+      The model is better calibrated on average but more conservative around boundaries and on small
+      lesions, which is exactly what hurts on rare classes. Two reasonable metrics, opposite verdicts.
+      Because the three changes are bundled, this row does not say which of them is responsible.
     </p>
   </div>
   <div class="entry">
@@ -149,6 +152,20 @@
       foreground/background skew of BraTS slices rather than anything architectural.
     </p>
   </div>
+</section>
+
+<section>
+  <h2>Limitations</h2>
+  <ul>
+    <li><strong>2D slices from 3D volumes.</strong> After cropping and dropping empty slices, each model sees a
+        few thousand supervised slices, which is small for a 100M-parameter network, and no context along the
+        through-plane axis.</li>
+    <li><strong>Trained from scratch.</strong> No ImageNet or medical pretraining for the ResNet or ViT parts.</li>
+    <li><strong>Fixed 15-epoch budget</strong> and a small hand-picked hyperparameter search; the numbers are
+        best-epoch validation, not a held-out test set.</li>
+    <li><strong>Raw model output.</strong> No connected-component filtering, 3D consistency, or ensembling, so
+        the Dice is likely pessimistic relative to a polished BraTS pipeline.</li>
+  </ul>
 </section>
 
 <a class="back" href="../index.html">&larr; Back to home</a>

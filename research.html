@@ -36,13 +36,18 @@
       <span class="who">Yihang Jiao.</span>
       <span class="note"><em>Independent project, 2025.</em></span>
       I built a 2D segmentation pipeline for four MRI modalities (FLAIR, T1, T1-CE, T2). A U-Net, a
-      configurable U-Net, and a TransUNet all train through one entrypoint under the same data and
-      training settings, so the three can be compared fairly. The data path does brain-region
-      cropping, skips empty slices, normalizes each slice, and oversamples slices that contain tumor
-      to handle the class imbalance. TransUNet reached 0.7575 foreground Dice and the tuned U-Net
-      0.7326. Changing only the loss function, without touching the architecture, was worth about 7
-      Dice points. The class-wise numbers show the transformer's gain comes from one diffuse tumor
-      subregion (0.7652 against 0.6800) rather than from the compact ones.
+      configurable U-Net, and a TransUNet all train through one entrypoint under the same data path,
+      split rule, and metric, and each checkpoint stores its own configuration so the model can be
+      rebuilt exactly. The data path crops to the brain, skips empty slices, normalizes each slice, and
+      oversamples slices that contain tumor; the loss is class-weighted cross-entropy plus a Dice term
+      computed only over classes present in the batch. Making the U-Net deeper and switching its
+      normalization, with the loss untouched, dropped foreground Dice from 0.7326 to 0.6323. Reworking
+      only the loss and sampler on that same architecture brought it back to 0.7033, about 7 points.
+      TransUNet reached the best foreground Dice, 0.7575, but nearly all of its gain is in one diffuse
+      tumor subregion (0.7652 against 0.6800); on the compact structures the plain U-Net is as good or
+      better. A variant that adds self-attention on a skip connection, stronger augmentation, and a
+      smaller input lowered cross-entropy but also lowered Dice, to 0.7347. All models were trained from
+      scratch on 2D slices under a 15-epoch budget; numbers are best-epoch validation.
       <div class="brackets">
         Paper: <a href="assets/papers/brats-unet-vs-transunet.pdf">yhj3.github.io/assets/papers/brats-unet-vs-transunet.pdf</a><br>
         Write-up: <a href="projects/brats.html">yhj3.github.io/projects/brats.html</a><br>
