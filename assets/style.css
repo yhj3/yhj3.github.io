@@ -148,3 +148,8 @@ footer {
   .portrait { width: 128px; }
   header.hero h1 { font-size: 26px; }
 }
+
+/* figures */
+.fig{margin:0 0 20px}
+.fig img{display:block;width:100%;height:auto;border:1px solid var(--rule, #ddd);border-radius:4px}
+.fig figcaption{font-size:.9em;color:var(--muted, #666);margin-top:8px;line-height:1.45}

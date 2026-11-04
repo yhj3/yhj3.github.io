@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BraTS: U-Net vs. TransUNet — Yihang Jiao</title>
 <meta name="description" content="A controlled comparison of U-Net and TransUNet on multi-modal brain MRI, with class-wise Dice and an ablation isolating loss and sampling design from backbone choice.">
-<link rel="stylesheet" href="../assets/style.css?v=18">
+<link rel="stylesheet" href="../assets/style.css?v=19">
 </head>
 <body>
 
@@ -88,6 +88,12 @@
 
 <section>
   <h2>Results</h2>
+  <figure class="fig">
+    <img src="../assets/img/brats-examples.png" alt="Four validation slices: raw FLAIR, ground-truth tumor mask, TransUNet prediction, and the prediction overlaid on FLAIR.">
+    <figcaption>Four validation slices from the TransUNet checkpoint. Rows: raw FLAIR input, ground-truth
+    tumor mask, predicted mask, prediction overlaid on FLAIR. Chosen for tumor size and shape, not for
+    accuracy; all twelve rendered samples are in the repository under <span class="mono">viz/</span>.</figcaption>
+  </figure>
   <div class="tablewrap">
   <table>
     <caption>
