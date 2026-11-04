@@ -89,10 +89,12 @@
 <section>
   <h2>Results</h2>
   <figure class="fig">
-    <img src="../assets/img/brats-examples.png" alt="Four validation slices: raw FLAIR, ground-truth tumor mask, TransUNet prediction, and the prediction overlaid on FLAIR.">
-    <figcaption>Four validation slices from the TransUNet checkpoint. Rows: raw FLAIR input, ground-truth
-    tumor mask, predicted mask, prediction overlaid on FLAIR. Chosen for tumor size and shape, not for
-    accuracy; all twelve rendered samples are in the repository under <span class="mono">viz/</span>.</figcaption>
+    <img src="../assets/img/brats-examples.png" alt="Two validation slices: raw FLAIR, ground-truth tumor mask, TransUNet prediction, and the prediction overlaid on FLAIR.">
+    <figcaption>Two validation slices from the TransUNet checkpoint, one per row. Columns: raw FLAIR input,
+    ground-truth mask, predicted mask, prediction overlaid on FLAIR. These are the two closest matches among
+    the twelve rendered samples in the repository (whole-tumor Dice 0.90 and 0.90, measured on the rendered
+    masks); typical slices match less well, and the smallest subregion is where predictions diverge most.
+    All twelve are in the repository under <span class="mono">viz/</span>.</figcaption>
   </figure>
   <div class="tablewrap">
   <table>
